@@ -90,6 +90,18 @@ td input:disabled,textarea:disabled{background:#f8fafc;color:#64748b}
 #lf{display:flex;flex-direction:column;gap:8px}
 #login .card{display:flex;flex-direction:column;gap:10px}
 .b:disabled{cursor:not-allowed}
+
+/* okunaklı tablolar */
+table{font-size:13px}
+td,th{height:auto;vertical-align:middle;padding:6px 8px;border:1px solid #cbd5e1}
+th,th.lbl,th.prev{background:var(--c);color:#fff;font-weight:700;text-align:center}
+td.lbl{background:#eef2f7;color:#0f172a;font-weight:600}
+td.prev{background:#f8fafc;color:#475569;font-weight:600}
+td input{background:#fff;color:#0f172a;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;text-align:center}
+td input:focus,textarea:focus{outline:2px solid #f59e0b;outline-offset:0}
+td input:disabled,textarea:disabled{background:#f1f5f9;color:#475569}
+textarea{background:#fff;color:#0f172a;font-size:13px;min-height:90px}
+.card h3{font-size:15px;padding-bottom:6px;border-bottom:2px solid var(--l)}
 </style></head><body>
 <div id="login" style="display:none"><div class="card"><h2 style="margin:0">📰 Haftalık Bülten</h2>
 <form id="lf"><b>Ajanda hesabınla giriş yap</b><input id="em" placeholder="Kullanıcı adı / e-posta" required><input id="pw" type="password" placeholder="Şifre" required><button class="b" style="padding:11px">Giriş</button></form>

@@ -24,9 +24,13 @@ function defaults(unitName) {
   return d;
 }
 // Yeni hafta: tablo hücreleri boş başlar; serbest metinler geçen haftadan devralınır
+const KEEP = { 2: 'all', 8: 'all', 10: [0], 11: [0], 12: [2] };   // yeni haftada silinmeyen tablolar: slayt -> tablo numaraları (Genel Bilgiler, Ambulans Bakım, Modüler Eğitim, ASTE, DÖF Takibi)
 function blankFor(n, pd) {
   const d = { ...defaults(n) };
-  for (const k of Object.keys(d)) if (k.split('|')[1] !== 'x') d[k] = ''; else if (pd && pd[k] != null) d[k] = pd[k];
+  for (const k of Object.keys(d)) {
+    const [s, t] = k.split('|'), keep = t === 'x' || KEEP[s] === 'all' || (KEEP[s] || []).includes(+t);
+    if (keep) { if (pd && pd[k] != null) d[k] = pd[k]; } else d[k] = '';
+  }
   return d;
 }
 const prevValue = (si, ti, rs, r, c, pd) => {            // "Geçen Hafta" = geçen haftanın "Bu Hafta" değeri
