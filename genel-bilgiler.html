@@ -29,11 +29,7 @@ label{display:block;font-size:11px;font-weight:700;color:#64748b;margin:10px 0 4
 label.ck{display:flex;gap:6px;align-items:center;text-transform:none;font-size:12px;font-weight:500;color:#334155;margin:3px 0}
 input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
 .ck input{width:auto}textarea{min-height:80px;resize:vertical}
-.err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
-#login{position:fixed;inset:0;background:rgba(15,23,42,.72);display:grid;place-items:center;padding:16px;z-index:50}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
-#login .card{width:min(420px,100%);padding:28px}
-#login h1{font-size:19px;text-align:center;margin:0 0 12px}
 header.top{background:var(--c);color:#fff;padding:14px 16px}
 .hi{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
 header h1{font-size:21px;margin:0}
@@ -95,7 +91,7 @@ main{max-width:1400px;width:100%;flex:1}
 <body>
 <div id="app" class="hide">
 <div id="ortak-ust" data-sayfa="genel"></div>
-<script src="ortak.js"></script>
+<script src="ortak.js?v=4"></script>
  <main>
   <div class="atab noprint" id="stab">
    <button type="button" data-s="ist" class="on">📍 İstasyonlar ve telsiz kodları</button>
@@ -226,13 +222,13 @@ $('gdel').onclick=async()=>{
   if(r.error||!r.data||!r.data.length){toast('Silinemedi.');return}
   $('gdlg').close();toast('Kayıt silindi.');load(ed.key);
 };
-$('out').onclick=async()=>{await db.auth.signOut();location.replace('index.html')};
 (async()=>{
   const{data:{user}}=await db.auth.getUser();
   if(!user){location.href='index.html';return}
   const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(!p||!p.aktif){location.href='index.html';return}
-  admin=p.rol==='admin';ortakKullanici(p);
+  if(!ortakKullanici(p))return;
+  admin=p.rol==='admin';
   $('app').classList.remove('hide');
   Object.keys(CFG).forEach(buildPanel);
   Object.keys(CFG).forEach(load);

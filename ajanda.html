@@ -40,13 +40,6 @@ label.ck{display:flex;align-items:center;gap:6px;text-transform:none;letter-spac
 input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
 .ck input{width:auto}
 textarea{resize:vertical;min-height:80px}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 20px 40px rgba(15,23,42,.25);padding:28px;width:min(420px,100%)}
-#login{position:fixed;inset:0;background:rgba(15,23,42,.72);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;z-index:50}
-.ic{width:64px;height:64px;border-radius:16px;background:var(--l);display:grid;place-items:center;font-size:30px;margin:0 auto 12px}
-.card h1{font-size:19px;margin:0;text-align:center}
-.card p{color:#64748b;font-size:12px;text-align:center;margin:4px 0 14px}
-.err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
-.cp{border-top:1px solid #f1f5f9;margin-top:18px;padding-top:12px;text-align:center;font-size:11px;color:#94a3b8}
 #app:not(.hide){display:flex;flex-direction:column;flex:1}
 nav div{max-width:1400px;margin:0 auto;display:flex;gap:6px;padding:12px 16px 0;overflow-x:auto}
 nav button{background:#fff;border:1px solid #cbd5e1;border-radius:99px;padding:7px 14px;font-weight:600;font-size:12.5px;color:#334155;white-space:nowrap}
@@ -93,21 +86,14 @@ dialog{border:0;border-radius:16px;padding:22px;width:min(440px,94vw);box-shadow
 dialog::backdrop{background:rgba(15,23,42,.7)}
 dialog h2{font-size:16px;margin:0 0 4px}
 dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#475569;margin:16px 0 8px}
-#adm{width:min(780px,96vw);max-height:92vh}
 .row,.g3{display:grid;gap:10px;grid-template-columns:1fr 1fr}
 .g3{grid-template-columns:1.3fr 1fr 1fr}
 .ubx{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px}
 .btns{display:flex;gap:8px;margin-top:14px}.btns .b{flex:1;padding:10px}
-.pn{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
-.ur{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #e2e8f0;border-radius:12px;padding:8px 12px;margin-bottom:6px;font-size:12px}
-.ur small{display:block;color:#64748b}
-.ua{display:flex;gap:6px;flex-shrink:0}
-.pas{background:#fee2e2;color:#b91c1c}
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 16px;border-radius:12px;z-index:99;font-size:13px}
 .who{font-size:10.5px;opacity:.85;line-height:1.3}
 td.col{height:auto;min-height:320px;padding:8px}
 .amb{width:38px;height:25px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-6px;margin-right:8px}
-.ic .amb{width:46px;height:31px;stroke:var(--c);margin:0}
 .pi{border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px;margin:8px 0;background:#f8fafc}
 .pi.gec{opacity:.75}
 .pt{display:flex;justify-content:space-between;gap:8px}
@@ -115,11 +101,8 @@ td.col{height:auto;min-height:320px;padding:8px}
 .pi.gec .pt span{color:#9f1d2c}
 .ps{font-size:11px;color:#64748b}
 .pi p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
-.atab{display:flex;gap:6px;border-bottom:1px solid #e2e8f0;margin:12px 0}
-.atab button{background:none;padding:9px 14px;font-weight:600;color:#64748b;border-bottom:3px solid transparent}
-.atab button.on{color:var(--c);border-bottom-color:var(--c)}
 .emp{color:#94a3b8;font-size:12px;text-align:center;margin:10px 0}
-@media(max-width:700px){.g3,.row{grid-template-columns:1fr}.ur{flex-direction:column;align-items:flex-start}}
+@media(max-width:700px){.g3,.row{grid-template-columns:1fr}}
 #pr{display:none}
 @media print{
 @page{size:A4 landscape;margin:8mm}
@@ -174,7 +157,7 @@ body{background:#fff;display:block;min-height:0}
 
 <div id="app" class="hide">
 <div id="ortak-ust" data-sayfa="ajanda"></div>
-<script src="ortak.js"></script>
+<script src="ortak.js?v=4"></script>
   <nav><div id="tabs" role="tablist"></div></nav>
   <main>
     <div class="tb">
@@ -251,7 +234,6 @@ body{background:#fff;display:block;min-height:0}
 <script>
 const SB_URL='https://adylgqlzumwnzgehqjwf.supabase.co';
 const SB_KEY='sb_publishable_6FJPyl7rxOdLsjhqEWM4hA_6Ez9g2i4';
-const ROL_AD={admin:'Yönetici',baskekim:'Başhekim',birim_kullanicisi:'Birim kullanıcısı',skkm:'SKKM (ortak hesap)'};
 const BIRIMLER=['Bilgi Sistemleri Birimi','Personel Birimi','Kalite Birimi','Eğitim Birimi','Disiplin Birimi','Teknik Birim','Depo Birimi','Tıbbi Cihaz Birimi','Ayniyat Birimi','Ambulans Bakım Birimi','Arşiv Birimi','SKKM Birimi','SAKOM Birimi'];
 const GUN7=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
 // etiket, açıklama, ikon, tema, rozet
@@ -271,16 +253,14 @@ const tabsOf=p=>{
   const m=p.birimler.some(b=>MESAI.includes(b)),n=p.birimler.some(b=>NOBET.includes(b)||b===SKM);
   return['bashekim',...(m||!n?['birim']:[]),...(n?['nobet']:[]),'kisisel'];
 };
-const ortakMi=p=>!!p.ortak||p.rol==='skkm';
 const db=supabase.createClient(SB_URL,SB_KEY);
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let me=null,tab='bashekim',rows=[],users=[];
+let me=null,tab='bashekim',rows=[];
 let bugun=[],tickH=null,yenH=null;const alarm=new Set();
 
 const A='İIıÇçĞğÖöŞşÜü',B='iiiccggoossuu';
 const sade=s=>s.replace(/[İIıÇçĞğÖöŞşÜü]/g,c=>B[A.indexOf(c)]).toLowerCase();
-const ilkSifre=ad=>{const w=ad.trim().split(/\s+/).filter(Boolean);return w.length?sade(w[0][0]+w[w.length-1][0])+'123456':''};
 
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
@@ -332,18 +312,16 @@ async function enter(){
   if(!user)return showLogin();
   const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(!p||!p.aktif||!tabsOf(p)){await db.auth.signOut();return showLogin()}
+  if(!ortakKullanici(p))return;
   me=p;{const q=new URLSearchParams(location.search).get('tab');tab=(q&&tabsOf(p).includes(q))?q:tabsOf(p)[0]}
   
   
   $('app').classList.remove('hide');
-  ortakKullanici(p);
   {const t=new URLSearchParams(location.search).get('tarih');if(t&&/^\d{4}-\d{2}-\d{2}$/.test(t))$('cur').value=t}if(!$('cur').value)$('cur').value=iso(new Date());
   drawTabs();load();
-  const zorunlu=!p.sifre_degisti&&!ortakMi(p);
-  if(zorunlu){location.href='index.html';return}
   clearInterval(tickH);clearInterval(yenH);
   tickH=setInterval(tick,30000);yenH=setInterval(()=>bugunYukle(false),120000);
-  bugunYukle(!zorunlu);
+  bugunYukle(true);
 }
 
 const rozet=k=>{
@@ -409,7 +387,6 @@ function openEdit(ev,date,time){
   $('dlg').showModal();
 }
 
-$('out').onclick=async()=>{await db.auth.signOut();showLogin()};
 $('tabs').onclick=e=>{const t=e.target.closest('[data-t]');if(t){tab=t.dataset.t;drawTabs();load()}};
 $('tbody').onclick=async e=>{
   const ed=e.target.closest('[data-e]'),x=e.target.closest('[data-x]'),ak=e.target.closest('[data-ak]');

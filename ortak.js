@@ -1,4 +1,4 @@
-/* Tüm sayfaların ortak üst bölümü, sayfa menüsü ve alt bilgisi.
+/* Tüm sayfaların ortak üst bölümü, sayfa menüsü, alt bilgisi, çıkış ve ilk şifre kuralı.
    Kullanım: <div id="ortak-ust" data-sayfa="ajanda"></div><script src="ortak.js"></script> */
 (function(){
   const SAYFALAR={
@@ -10,6 +10,9 @@
   const ALT='Çanakkale İASB © 2026 • Agonya V2';
   const AMB='<svg viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg>';
   const $=id=>document.getElementById(id);
+  const SB_URL='https://adylgqlzumwnzgehqjwf.supabase.co';
+  const SB_KEY='sb_publishable_6FJPyl7rxOdLsjhqEWM4hA_6Ez9g2i4';
+  const OTURUM='sb-adylgqlzumwnzgehqjwf-auth-token';
   const yer=$('ortak-ust'),aktif=yer.dataset.sayfa;
 
   const css=document.createElement('style');
@@ -59,11 +62,28 @@ ${dugme('pwbtn','sifre','','🔑 Şifre')}
   const yonetimGoster=()=>{const k=oku(),ben=!!(k&&$('who').textContent.includes(k.ad));$('adminbtn').classList.toggle('hide',!(ben&&k.admin));$('pwbtn').classList.toggle('hide',ben&&!!k.ortak)};
   new MutationObserver(yonetimGoster).observe($('who'),{childList:true,characterData:true,subtree:true});
 
-  // Profil bilgisi olan sayfalar kullanıcı adını bu fonksiyonla yazar.
+  // Çıkış her sayfada aynıdır: oturum kapatılır, ana sayfadaki giriş paneline gidilir.
+  $('out').onclick=async()=>{
+    $('out').disabled=true;
+    try{
+      const t=JSON.parse(localStorage.getItem(OTURUM)).access_token;
+      await fetch(SB_URL+'/auth/v1/logout',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+t},signal:AbortSignal.timeout(4000)});
+    }catch(e){/* sunucuya ulaşılamasa da bu tarayıcıdaki oturum silinir */}
+    try{localStorage.removeItem(OTURUM);localStorage.removeItem('ort_kullanici')}catch(e){}
+    location.replace('index.html');
+  };
+  // Geri tuşuyla bellekten açılan sayfa yeniden yüklenir (çıkıştan sonra eski veriler görünmesin).
+  addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
+
+  // Her sayfa profili bu fonksiyona verir. false dönerse sayfa veri yüklemeden durmalıdır:
+  // ilk şifresini belirlememiş kullanıcı yalnızca ana sayfadaki şifre ekranını kullanabilir.
   window.ortakKullanici=p=>{
+    const ortak=!!p.ortak||p.rol==='skkm';
+    if(aktif!=='index'&&'sifre_degisti' in p&&!p.sifre_degisti&&!ortak){location.replace('index.html');return false}
     const ek=p.rol==='admin'?'Yönetici':p.rol==='baskekim'?'Başhekim':(p.birimler||[]).join(', ');
-    try{localStorage.setItem('ort_kullanici',JSON.stringify({ad:p.adsoyad,admin:p.rol==='admin',ortak:!!p.ortak||p.rol==='skkm'}))}catch(e){}
+    try{localStorage.setItem('ort_kullanici',JSON.stringify({ad:p.adsoyad,admin:p.rol==='admin',ortak}))}catch(e){}
     $('who').textContent='👤 '+p.adsoyad+(ek?' ('+ek+')':'');
     yonetimGoster();
+    return true;
   };
 })();

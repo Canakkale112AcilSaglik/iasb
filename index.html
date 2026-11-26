@@ -112,7 +112,7 @@ main{max-width:1400px;width:100%;flex:1}
 
 <div id="app" class="hide">
 <div id="ortak-ust" data-sayfa="index"></div>
-<script src="ortak.js"></script>
+<script src="ortak.js?v=4"></script>
  <main>
   <div class="kp ozet">
    <div class="card"><b id="k1">–</b><span>Bugün planlanan</span></div>
@@ -284,7 +284,6 @@ $('lf').addEventListener('submit',async e=>{
   if(error){$('lerr').textContent='Ad soyad veya şifre hatalı.';$('lerr').classList.remove('hide');return}
   await enter();
 });
-$('out').onclick=async()=>{await db.auth.signOut();showLogin()};
 
 async function enter(){
   const{data:{user}}=await db.auth.getUser();
@@ -475,7 +474,10 @@ function openPw(forced){
   $('pdlg').dataset.f=forced?'1':'';$('pc').classList.toggle('hide',!!forced);$('pnote').classList.toggle('hide',!forced);
   $('pdlg').showModal();
 }
+// İlk giriş şifresi zorunludur: Esc engellenir; tarayıcı yine de kapatırsa pencere yeniden açılır.
 $('pdlg').addEventListener('cancel',e=>{if($('pdlg').dataset.f)e.preventDefault()});
+$('pdlg').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('pdlg').dataset.f)e.preventDefault()});
+$('pdlg').addEventListener('close',()=>{if(me&&$('pdlg').dataset.f&&!$('pdlg').open)$('pdlg').showModal()});
 
 $('pwbtn').onclick=()=>openPw(false);
 $('pc').onclick=()=>$('pdlg').close();

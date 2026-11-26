@@ -21,11 +21,7 @@ label{display:block;font-size:11px;font-weight:700;color:#64748b;margin:10px 0 4
 label.ck{display:flex;gap:6px;align-items:center;text-transform:none;font-size:12px;font-weight:500;color:#334155;margin:3px 0}
 input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
 .ck input{width:auto}textarea{min-height:80px;resize:vertical}
-.err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
-#login{position:fixed;inset:0;background:rgba(15,23,42,.72);display:grid;place-items:center;padding:16px;z-index:50}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
-#login .card{width:min(420px,100%);padding:28px}
-#login h1{font-size:19px;text-align:center;margin:0 0 12px}
 header.top{background:var(--c);color:#fff;padding:14px 16px}
 .hi{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
 header h1{font-size:21px;margin:0}
@@ -94,8 +90,6 @@ td input{width:100%;border:0;background:transparent;text-align:center;padding:4p
 td input:disabled,textarea:disabled{background:#f8fafc;color:#64748b}
 #status{color:#64748b}
 #toast{opacity:0;transition:.2s}#toast.on{opacity:1}
-#lf{display:flex;flex-direction:column;gap:8px}
-#login .card{display:flex;flex-direction:column;gap:10px}
 .b:disabled{cursor:not-allowed}
 
 /* okunaklı tablolar */
@@ -114,10 +108,8 @@ main{max-width:1400px;width:100%;flex:1}
 #tabs{max-width:1400px;width:100%}
 .yok{text-align:center;padding:48px 16px;font-size:17px;font-weight:600;color:#475569}
 </style></head><body>
-<div id="login" style="display:none"><div class="card"><h2 style="margin:0;text-align:center"><svg viewBox="0 0 48 32" width="46" height="31" fill="none" stroke="#1e2f4f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg><br>Çanakkale İASB / Haftalık Bülten</h2>
-<small id="le" style="color:#be123c"></small><button id="lo" type="button" class="b g">Giriş sayfasına dön</button><div class="ort-giris" data-ort-alt></div></div></div>
-<div id="app"><div id="ortak-ust" data-sayfa="bulten"></div>
-<script src="ortak.js"></script>
+<div id="app" style="display:none"><div id="ortak-ust" data-sayfa="bulten"></div>
+<script src="ortak.js?v=4"></script>
 <div id="tabs"></div>
 <main><div class="bar"><button id="save" class="b">💾 Bu haftayı kaydet</button><button id="approve" class="b am"></button><span id="status"></span>
 <span style="flex:1"></span>
@@ -127,4 +119,4 @@ main{max-width:1400px;width:100%;flex:1}
 <button id="roll" class="b ro" title="Haftayı onayla, geçmişi sil, yeni haftaya geç">🔄 Onayla ve geçmişi sil</button></div><div id="err" class="noprint" style="color:#be123c;margin-bottom:10px"></div><div id="form"></div></main><footer class="ort-alt" data-ort-alt></footer></div>
 <div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="bulten-config.js"></script><script src="bulten-app.js"></script></body></html>
+<script src="bulten-config.js"></script><script src="bulten-app.js?v=4"></script></body></html>

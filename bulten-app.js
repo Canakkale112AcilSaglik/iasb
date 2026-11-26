@@ -172,18 +172,14 @@ window.__t = { fillSlide, setSCH: s => SCH = s };   // test için
 /* ---------- başlat ---------- */
 async function init() {
   SCH = await (await fetch('bulten-schema.json')).json();
-  // Giriş yalnızca ana sayfadadır: çıkışta sunucudaki oturum da kapatılıp oraya gidilir.
-  const cikis = async () => {
-    const t = getSess()?.access_token;
-    if (t) await fetch(CFG.URL + '/auth/v1/logout', { method: 'POST', headers: { apikey: CFG.KEY, Authorization: 'Bearer ' + t } }).catch(() => {});
-    localStorage.removeItem(SKEY); location.replace('index.html');
-  };
-  const gate = msg => { $('#login').style.display = ''; $('#app').style.display = 'none'; $('#le').textContent = msg; $('#lo').onclick = cikis; };
+  // Giriş, çıkış ve ilk şifre yalnızca ana sayfadadır; burada sadece bilgi mesajı gösterilir.
+  const goster = () => { $('#app').style.display = ''; };
+  const bilgi = msg => { goster(); $('.bar').style.display = $('#tabs').style.display = 'none'; $('#form').replaceChildren(el('div', { className: 'card yok', textContent: msg })); };
   if (DEMO) user = { role: 'admin', units: Object.keys(SCH.units), name: 'Demo' };
   else {
     if (!(await freshSession().catch(() => null))) return void location.replace('index.html');
     const me = await api('/rest/v1/rpc/bulten_me', { method: 'POST', body: '{}' }).catch(e => ({ err: String(e.message).slice(0, 200) }));
-    if (!me || me.err) return gate(me ? 'Sunucu hatası: ' + me.err + ' — supabase_profil.sql çalıştırıldı mı?' : 'Bu kullanıcının aktif bir profili yok.');
+    if (!me || me.err) return bilgi(me ? 'Sunucu hatası: ' + me.err + ' — supabase_profil.sql çalıştırıldı mı?' : 'Bu kullanıcının aktif bir profili yok.');
     user = { role: me.admin ? 'admin' : 'unit', units: me.units, name: me.adsoyad };
   }
   // Ad soyad ve birim diğer sayfalarla aynı biçimde yazılır; profil okunamazsa bülten bilgisi kullanılır.
@@ -191,15 +187,11 @@ async function init() {
   else {
     const uid = getSess()?.user?.id;
     const p = uid ? (await api('/rest/v1/profiles?select=*&id=eq.' + encodeURIComponent(uid)).catch(() => []))[0] : null;
-    ortakKullanici(p || { adsoyad: user.name, rol: user.role === 'admin' ? 'admin' : '', birimler: user.units });
+    if (!ortakKullanici(p || { adsoyad: user.name, rol: user.role === 'admin' ? 'admin' : '', birimler: user.units })) return;
   }
-  $('#out').onclick = DEMO ? () => location.reload() : cikis;
   // Biriminin bültende slaytı olmayan kullanıcı: menü açık kalır, yalnızca uyarı gösterilir.
-  if (user.role !== 'admin' && !(user.units || []).some(n => SCH.units[n])) {
-    $('.bar').style.display = $('#tabs').style.display = 'none';
-    $('#form').replaceChildren(el('div', { className: 'card yok', textContent: 'Bülteniniz bulunmamaktadır.' }));
-    return;
-  }
+  if (user.role !== 'admin' && !(user.units || []).some(n => SCH.units[n])) return bilgi('Bülteniniz bulunmamaktadır.');
+  goster();
   const cfg = ((await getRows('_config').catch(() => ({})))._meta || {}).data || {};
   $('#week').value = cfg.week || isoWeek(); $('#range').value = cfg.range || '';
   const saveCfg = () => putRow('_meta', { week: $('#week').value.trim(), range: $('#range').value }, 'draft', '_config');
