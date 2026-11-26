@@ -1,34 +1,107 @@
 <!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Haftalık Bülten</title>
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1e2f4f">
+<title>Haftalık Bülten · Çanakkale 112 İASB</title>
 <style>
-:root{--red:#e30a17;--bg:#f4f4f6;--card:#fff;--tx:#1d1d22;--mut:#6b6b76;--ln:#d9d9e0}
-@media(prefers-color-scheme:dark){:root{--bg:#17171b;--card:#222228;--tx:#eee;--mut:#9a9aa6;--ln:#3a3a44}}
-body{margin:0;font:14px system-ui,sans-serif;background:var(--bg);color:var(--tx)}
-header{background:var(--red);color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-header b{font-size:16px}header input{padding:5px 8px;border:0;border-radius:6px;width:90px}header #range{width:130px}
-button{font:inherit;padding:7px 14px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--tx);cursor:pointer}
-button.p{background:var(--red);color:#fff;border-color:var(--red)}button:disabled{opacity:.45;cursor:not-allowed}
-#tabs{display:flex;gap:4px;padding:10px 16px 0;overflow-x:auto;border-bottom:2px solid var(--red)}
-.tab{border-radius:8px 8px 0 0;border-bottom:0;white-space:nowrap}.tab.on{background:var(--red);color:#fff;border-color:var(--red)}
-main{max-width:1000px;margin:0 auto;padding:16px}.bar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:14px}.card h3{margin:0 0 10px;font-size:14px;color:var(--red)}
-.scroll{overflow-x:auto;margin-bottom:10px}table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--ln);padding:3px 6px}
-th{background:var(--red);color:#fff;font-weight:600}.lbl{background:rgba(128,128,128,.12)}.prev{color:var(--mut);text-align:center}
-td input{width:100%;box-sizing:border-box;border:0;background:transparent;color:inherit;font:inherit;text-align:center;padding:4px}
-textarea{width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--ln);border-radius:8px;background:transparent;color:inherit;font:inherit}
-#status{color:var(--mut)}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;opacity:0;transition:.2s}#toast.on{opacity:1}
-#login{max-width:320px;margin:15vh auto;display:flex;flex-direction:column;gap:10px}#login input{padding:9px;border:1px solid var(--ln);border-radius:8px}
+:root{--c:#1e2f4f;--d:#14213b;--l:#e8edf5}
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;color:#1e293b;font:14px/1.45 "Segoe UI",Tahoma,Geneva,Verdana,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0}
+.hide{display:none!important}
+.b{background:var(--c);color:#fff;border-radius:12px;padding:8px 14px;font-weight:600;font-size:12px;text-decoration:none;display:inline-block}
+.b:hover{background:var(--d)}.b.g{background:#f1f5f9;color:#334155}.b.g:hover{background:#e2e8f0}
+.b.bl{background:rgba(0,0,0,.2)}.b.em{background:#3b6b4c}.b:disabled{opacity:.6}
+label{display:block;font-size:11px;font-weight:700;color:#64748b;margin:10px 0 4px;text-transform:uppercase}
+label.ck{display:flex;gap:6px;align-items:center;text-transform:none;font-size:12px;font-weight:500;color:#334155;margin:3px 0}
+input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
+.ck input{width:auto}textarea{min-height:80px;resize:vertical}
+.err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
+#login{position:fixed;inset:0;background:rgba(15,23,42,.72);display:grid;place-items:center;padding:16px;z-index:50}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
+#login .card{width:min(420px,100%);padding:28px}
+#login h1{font-size:19px;text-align:center;margin:0 0 12px}
+header.top{background:var(--c);color:#fff;padding:14px 16px}
+.hi{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+header h1{font-size:21px;margin:0}
+.ub{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:8px 14px}
+nav{background:#fff;border-bottom:1px solid #e2e8f0}
+nav div{max-width:1200px;margin:0 auto;display:flex;gap:6px;padding:0 16px;overflow-x:auto}
+nav a{padding:12px 16px;font-weight:600;color:#64748b;border-bottom:3px solid transparent;white-space:nowrap;text-decoration:none}
+nav a:hover{color:#1e293b}nav a.on{color:var(--c);border-bottom-color:var(--c)}
+main{max-width:1200px;margin:0 auto;padding:16px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.kp .card b{display:block;font-size:28px;color:var(--c)}.kp .card span{color:#64748b;font-size:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:140px}
+.tb{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:10px}
+.tb h2{font-size:16px;margin:0}
+.pl{display:block;text-decoration:none;color:inherit;border:1px solid #cbd5e1;background:#f8fafc;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pl:hover{background:var(--l);border-color:var(--c)}
+.pl.ok{background:#eef6f0;border-color:#b7d7c3}.pl.ip{background:#fbeff0;border-color:#efc3c9}
+.pl .r1{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.pl .m{font-size:12px;color:#64748b}.pl p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.chip{font-size:11px;border-radius:99px;padding:1px 9px;background:#e2e8f0;color:#334155;font-weight:600}
+.emp{color:#94a3b8;text-align:center;padding:16px}
+.bar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.bar i{display:block;height:12px;background:var(--c);border-radius:6px;min-width:2px}
+.bar span:first-child{width:170px;flex:none}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border:1px solid #e2e8f0;padding:5px 8px;text-align:left;vertical-align:top}th{background:#f8fafc}
+.sc{overflow:auto;max-height:420px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+dialog{border:0;border-radius:16px;padding:22px;width:min(480px,94vw);box-shadow:0 20px 40px rgba(15,23,42,.35)}
+dialog::backdrop{background:rgba(15,23,42,.6)}
+dialog h2{margin:0 0 6px;font-size:17px}
+.btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;z-index:99}
+
+#adm{width:min(780px,96vw);max-height:92vh}
+dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#475569;margin:16px 0 8px}
+.g3{display:grid;gap:10px;grid-template-columns:1.3fr 1fr 1fr}
+.ubx{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px}
+.btns .b{flex:1;padding:10px}
+.pn{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
+.ur{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #e2e8f0;border-radius:12px;padding:8px 12px;margin-bottom:6px;font-size:12px}
+.ur small{display:block;color:#64748b}.ua{display:flex;gap:6px;flex-shrink:0}
+.b.am{background:#a16207}.b.ro{background:#e11d48}
+.chip.pas{background:#fee2e2;color:#b91c1c}
+.atab{display:flex;gap:6px;border-bottom:1px solid #e2e8f0;margin:12px 0}
+.atab button{background:none;padding:9px 14px;font-weight:600;color:#64748b;border-bottom:3px solid transparent}
+.atab button.on{color:var(--c);border-bottom-color:var(--c)}
+@media(max-width:700px){.g3{grid-template-columns:1fr}.ur{flex-direction:column;align-items:flex-start}}
+.pl a{color:inherit;text-decoration:none}.pl .r1>a{flex:1}.pl .pa{display:block}
+@media print{header,nav,#tabs,.noprint{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
+
+.ub label{margin:0;color:#fff;text-transform:none;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+#week{width:92px;padding:5px 9px}#range{width:140px;padding:5px 9px}
+#period{font-size:12px}
+#tabs{max-width:1200px;margin:0 auto;display:flex;gap:6px;padding:12px 16px 0;overflow-x:auto}
+.tab{background:#fff;border:1px solid #cbd5e1;color:#334155;border-radius:99px;padding:6px 14px;font-weight:600;font-size:12px;white-space:nowrap}
+.tab:hover{background:var(--l)}.tab.on{background:var(--c);color:#fff;border-color:var(--c)}
+.bar{flex-wrap:wrap;margin:0 0 12px;font-size:14px}
+section.card{margin-bottom:14px}.card h3{margin:0 0 10px;font-size:14px;color:var(--c)}
+.scroll{overflow-x:auto;margin-bottom:10px}
+td,th{border:1px solid #e2e8f0;padding:3px 6px}
+th{background:var(--c);color:#fff;font-weight:600}
+.lbl{background:#f1f5f9}.prev{color:#64748b;text-align:center}
+td input{width:100%;border:0;background:transparent;text-align:center;padding:4px;border-radius:0}
+td input:disabled,textarea:disabled{background:#f8fafc;color:#64748b}
+#status{color:#64748b}
+#toast{opacity:0;transition:.2s}#toast.on{opacity:1}
+#lf{display:flex;flex-direction:column;gap:8px}
+#login .card{display:flex;flex-direction:column;gap:10px}
+.b:disabled{cursor:not-allowed}
 </style></head><body>
-<div id="login" style="display:none"><h2>Haftalık Bülten</h2>
-<form id="lf" style="display:flex;flex-direction:column;gap:8px"><b>Ajanda hesabınla giriş yap</b><input id="em" placeholder="Kullanıcı adı / e-posta" required><input id="pw" type="password" placeholder="Şifre" required><button class="p">Giriş</button></form>
-<small id="le" style="color:var(--red)"></small><button id="lo" type="button">Çıkış / başka kullanıcı</button></div>
-<div id="app"><header><b>Haftalık Bülten <small>v3</small></b>
-<label class="adm">Hafta <input id="week" placeholder="2026-38"></label>
+<div id="login" style="display:none"><div class="card"><h2 style="margin:0">📰 Haftalık Bülten</h2>
+<form id="lf"><b>Ajanda hesabınla giriş yap</b><input id="em" placeholder="Kullanıcı adı / e-posta" required><input id="pw" type="password" placeholder="Şifre" required><button class="b" style="padding:11px">Giriş</button></form>
+<small id="le" style="color:#be123c"></small><button id="lo" type="button" class="b g">Çıkış / başka kullanıcı</button></div></div>
+<div id="app"><header class="top"><div class="hi"><h1>📰 Haftalık Bülten</h1>
+<div class="ub"><label class="adm">Hafta <input id="week" placeholder="2026-38"></label>
 <label class="adm">Tarih aralığı <input id="range" placeholder="11-18.09.2026"></label>
-<span id="period"></span><a href="index.html" style="color:#fff;margin-left:auto">🏠 Ana sayfa</a><span id="who"></span><button id="out">Çıkış</button></header>
+<span id="period"></span><b id="who" style="font-size:12px"></b><button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div></div></header>
+<nav><div><a href="index.html">🏠 Ana Sayfa</a><a href="ajanda.html">🗓️ Ajanda</a><a href="bulten.html" class="on">📰 Bülten</a><a href="genel-bilgiler.html">ℹ️ Genel Bilgiler</a></div></nav>
 <div id="tabs"></div>
-<main><div class="bar"><button id="save" class="p">Bu haftayı kaydet</button><button id="approve"></button><span id="status"></span>
-<span style="flex:1"></span><button id="export" class="p">📊 Sunuyu oluştur</button></div><div id="err" style="color:var(--red);margin-bottom:10px"></div><div id="form"></div></main></div>
+<main><div class="bar"><button id="save" class="b">💾 Bu haftayı kaydet</button><button id="approve" class="b am"></button><span id="status"></span>
+<span style="flex:1"></span><button id="export" class="b em">📊 Sunuyu oluştur</button></div><div id="err" class="noprint" style="color:#be123c;margin-bottom:10px"></div><div id="form"></div></main></div>
 <div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="bulten-config.js"></script><script src="bulten-app.js"></script></body></html>

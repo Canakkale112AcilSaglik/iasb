@@ -60,7 +60,23 @@ dialog::backdrop{background:rgba(15,23,42,.6)}
 dialog h2{margin:0 0 6px;font-size:17px}
 .btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;z-index:99}
-@media print{header,nav,.kp,.noprint,#bugunC{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
+
+#adm{width:min(780px,96vw);max-height:92vh}
+dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#475569;margin:16px 0 8px}
+.g3{display:grid;gap:10px;grid-template-columns:1.3fr 1fr 1fr}
+.ubx{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px}
+.btns .b{flex:1;padding:10px}
+.pn{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
+.ur{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #e2e8f0;border-radius:12px;padding:8px 12px;margin-bottom:6px;font-size:12px}
+.ur small{display:block;color:#64748b}.ua{display:flex;gap:6px;flex-shrink:0}
+.b.am{background:#a16207}.b.ro{background:#e11d48}
+.chip.pas{background:#fee2e2;color:#b91c1c}
+.atab{display:flex;gap:6px;border-bottom:1px solid #e2e8f0;margin:12px 0}
+.atab button{background:none;padding:9px 14px;font-weight:600;color:#64748b;border-bottom:3px solid transparent}
+.atab button.on{color:var(--c);border-bottom-color:var(--c)}
+@media(max-width:700px){.g3{grid-template-columns:1fr}.ur{flex-direction:column;align-items:flex-start}}
+.pl a{color:inherit;text-decoration:none}.pl .r1>a{flex:1}.pl .pa{display:block}
+@media print{header,nav,.kp,.noprint,#bugunC,#aracC{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
 </style>
 </head>
 <body>
@@ -79,6 +95,8 @@ dialog h2{margin:0 0 6px;font-size:17px}
  <header class="top"><div class="hi">
   <h1>🚑 Çanakkale 112 İASB</h1>
   <div class="ub"><span id="clk"></span><b id="who" style="font-size:12px"></b>
+   <button class="b am hide" id="adminbtn">🛡️ Yönetim</button>
+   <button class="b bl" id="pwbtn">🔑 Şifre</button>
    <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
  </div></header>
  <nav><div>
@@ -97,8 +115,13 @@ dialog h2{margin:0 0 6px;font-size:17px}
 
   <div class="card" id="bugunC" style="margin-bottom:14px">
    <div class="tb"><h2>📅 Bugünün planları</h2>
-    <div><button class="b em" id="new">➕ Plan ekle</button> <button class="b g" id="rf">🔄</button></div></div>
+    <div class="tl"><select id="bsel" class="hide" style="width:auto" aria-label="Plan filtresi"></select> <button class="b em" id="new">➕ Plan ekle</button> <button class="b g" id="rf">🔄</button></div></div>
    <div id="bl"></div>
+  </div>
+
+  <div class="card hide" id="aracC" style="margin-bottom:14px">
+   <div class="tb"><h2>🚑 Araç analizi</h2><a class="b g" href="genel-bilgiler.html">Ayrıntı →</a></div>
+   <div id="aracB"></div>
   </div>
 
   <div class="card">
@@ -117,17 +140,76 @@ dialog h2{margin:0 0 6px;font-size:17px}
 
 <dialog id="dlg">
  <form id="ef">
-  <h2>🗓️ Plan ekle</h2>
+  <h2 id="dt">🗓️ Plan ekle</h2>
+  <input type="hidden" id="eid">
   <label for="et">Ajanda türü</label><select id="et"></select>
   <div id="bw" class="hide"><label>Birim(ler)</label><div id="eb"></div></div>
   <div class="row">
    <div><label for="ed">Tarih</label><input type="date" id="ed" required></div>
    <div><label for="es">Saat</label><input type="time" id="es" step="900" required></div>
   </div>
+  <div id="dw" class="hide"><label for="eu">Durum</label><select id="eu"><option>Planlandı</option><option>Gerçekleşti</option><option>İptal</option></select>
+   <div id="iw" class="hide"><label for="ei">İptal nedeni</label><textarea id="ei" maxlength="500" style="min-height:56px"></textarea></div></div>
   <label for="ea">Açıklama / not</label>
   <textarea id="ea" maxlength="1000" required placeholder="Planlama detayı. Hasta veya kişisel veri yazmayın."></textarea>
-  <div class="btns"><button type="button" class="b g" id="ec">Vazgeç</button><button class="b" id="esv">💾 Kaydet</button></div>
+  <div class="btns"><button type="button" class="b ro hide" id="edel" style="flex:none">🗑️ Sil</button><button type="button" class="b g" id="ec">Vazgeç</button><button class="b" id="esv">💾 Kaydet</button></div>
  </form>
+</dialog>
+<dialog id="pdlg">
+  <form id="pf">
+    <h2>🔑 Şifre değiştir</h2>
+    <p id="pnote" class="hide" style="color:#b45309;font-size:12px;margin:6px 0 0">İlk girişiniz. Devam etmek için kendi şifrenizi belirleyin.</p>
+    <label for="p1">Yeni şifre (en az 8 karakter)</label>
+    <input id="p1" type="password" minlength="8" autocomplete="new-password" required>
+    <label for="p2">Yeni şifre (tekrar)</label>
+    <input id="p2" type="password" minlength="8" autocomplete="new-password" required>
+    <div class="err hide" id="perr" role="alert"></div>
+    <div class="btns"><button type="button" class="b g" id="pc">İptal</button><button class="b">Kaydet</button></div>
+  </form>
+</dialog>
+
+<dialog id="adm">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2>🛡️ Yönetici, personel ve yetki yönetimi</h2><button class="b g" id="admx">Kapat</button></div>
+  <div class="atab" id="atab"><button type="button" data-a="ap1" class="on">👥 Kullanıcı yönetimi</button><button type="button" data-a="ap2">🗄️ Veri yönetimi</button></div>
+  <div id="ap1">
+  <form id="uf" class="pn" style="margin-top:12px">
+    <h3 id="uft" style="margin-top:0">Yeni personel tanımla</h3>
+    <input type="hidden" id="uid">
+    <div class="g3">
+      <div><label for="un">Ad soyad</label><input id="un" required></div>
+      <div><label for="ur">Yetki</label><select id="ur"></select></div>
+      <div id="upw"><label for="up">Başlangıç şifresi</label><input id="up" required></div>
+    </div>
+    <label>Birimler</label><div class="ubx" id="ubx"></div>
+    <div style="font-size:11px;color:#64748b;margin-top:6px">“SKKM Birimi” seçilen kişi SKKM ajandasını görür ve not/plan ekler. SKKM ajandası ayrıca yöneticilere açıktır. “SKKM” hesabı tek ortak kullanıcıdır, buradan tanımlanmaz.</div>
+    <label class="ck hide" id="uakw" style="margin-top:10px"><input type="checkbox" id="uak" checked> Hesap aktif (kapatılırsa giriş yapamaz)</label>
+    <div class="btns"><button class="b em" id="usv">Personeli kaydet</button><button type="button" class="b g hide" id="ucn">Düzenlemeyi iptal et</button></div>
+  </form>
+  <h3>Kayıtlı personel</h3>
+  <div id="ulist" style="max-height:300px;overflow:auto"></div>
+  </div>
+  <div id="ap2" class="hide">
+  <h3 style="margin-top:0">Yedekleme ve veri temizliği</h3>
+  <div class="pn">
+    <div class="row">
+      <div><label for="yk">Ajanda</label><select id="yk"><option value="">Tüm ortak ajandalar</option><option value="bashekim">Başhekim</option><option value="birim">Birim (Mesai)</option><option value="nobet">Birim (Nöbet)</option><option value="koordinasyon">SKKM</option></select></div>
+      <div><label class="ck" style="margin-top:28px"><input type="checkbox" id="ykis"> Kişisel ajandaları da dahil et</label></div>
+    </div>
+    <div class="row">
+      <div><label for="ybas">Başlangıç tarihi (boşsa en baştan)</label><input type="date" id="ybas"></div>
+      <div><label for="ybit">Bitiş tarihi (boşsa en sona)</label><input type="date" id="ybit"></div>
+    </div>
+    <div class="btns" style="flex-wrap:wrap"><button type="button" class="b em" id="yjson">⬇️ Yedeği indir (JSON)</button><button type="button" class="b em" id="ycsv">⬇️ Excel için CSV</button><button type="button" class="b ro" id="ysil">🗑️ Seçili kayıtları sil</button></div>
+    <p style="font-size:11px;color:#64748b;margin:8px 0 0">Silmeden önce yedek dosyası otomatik indirilir ve onay için SİL yazmanız istenir. Kişisel ajandalar kişilerin özel notlarıdır, gerekmedikçe dahil etmeyin.</p>
+  </div>
+  <h3>Yedekten geri yükle</h3>
+  <div class="pn">
+    <label for="yf">Yedek dosyası (.json)</label>
+    <input type="file" id="yf" accept=".json,application/json">
+    <div class="btns"><button type="button" class="b" id="yyuk">♻️ Yedekten geri yükle</button></div>
+    <p style="font-size:11px;color:#64748b;margin:8px 0 0">Daha önce indirdiğiniz JSON yedeğini seçin. Sistemde zaten bulunan kayıtlar atlanır, üzerine yazılmaz. Sahibi sistemde bulunmayan kayıtlar yüklenmez.</p>
+  </div>
+  </div>
 </dialog>
 <div id="toast" class="hide"></div>
 
@@ -198,6 +280,7 @@ async function enter(){
   if(!p||!p.aktif||!tabsOf(p)){await db.auth.signOut();return showLogin('Hesap pasif veya yetkisiz.')}
   me=p;
   $('login').classList.add('hide');$('app').classList.remove('hide');
+  $('pwbtn').classList.toggle('hide',ortakMi(p));$('adminbtn').classList.toggle('hide',p.rol!=='admin');
   $('who').textContent='👤 '+p.adsoyad+' ('+(p.rol==='admin'?'Yönetici':p.rol==='baskekim'?'Başhekim':p.birimler.join(', '))+')';
   $('new').classList.toggle('hide',!tabsOf(p).some(canWrite)||p.rol==='skkm');
   const t=tabsOf(p);
@@ -206,9 +289,35 @@ async function enter(){
   if(!$('r1').value){$('r1').value=iso(pz);$('r2').value=iso(bg)}
   clearInterval(clkH);saatYaz();clkH=setInterval(saatYaz,1000);
   clearInterval(yenH);yenH=setInterval(bugunYukle,120000);
-  bugunYukle();rapor();
+  bugunYukle();rapor();aracAnaliz();
+  if(!p.sifre_degisti&&!ortakMi(p))openPw(true);
+  else if(p.rol==='admin'&&new URLSearchParams(location.search).get('yonetim'))$('adminbtn').click();
 }
 
+let todayAll=[];
+const ownMgr=e=>e.ekleyen===me.id||(['bashekim','birim','nobet'].includes(e.tur)&&isMgr());
+const canEdit=e=>e.tur==='koordinasyon'?(me.rol==='skkm'||skkmYetkili()):ownMgr(e);
+const canDel=e=>e.tur==='koordinasyon'?skkmYetkili():ownMgr(e);
+const eslesir=(e,v)=>!v||(v==='kisisel'?e.tur==='kisisel':v==='bashekim'?e.tur==='bashekim':hbl(e).some(x=>x===v.slice(2)||(v.slice(2)==='SKKM Birimi'&&x==='SKKM')));
+function bSecenek(){
+  const s=$('bsel');if(s.dataset.u===me.id)return;s.dataset.u=me.id;
+  const l=[['','Tüm planlarım'],['kisisel','📝 Kişisel']];
+  if(isMgr())l.push(['bashekim','👔 Başhekim']);
+  (isMgr()?BIRIMLER:me.birimler.filter(b=>b!=='Başhekimlik')).forEach(b=>l.push(['b:'+b,b]));
+  s.innerHTML=l.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join('');
+  let k='';try{k=localStorage.getItem('iasb_bsel_'+me.id)||''}catch(e){}
+  s.value=l.some(x=>x[0]===k)?k:'';
+  s.classList.toggle('hide',l.length<3);
+}
+$('bsel').onchange=()=>{try{localStorage.setItem('iasb_bsel_'+me.id,$('bsel').value)}catch(e){}bCiz()};
+function bCiz(){
+  const rows=todayAll.filter(e=>eslesir(e,$('bsel').value)),say=d=>rows.filter(r=>r.durum===d).length;
+  $('k1').textContent=say('Planlandı');$('k2').textContent=say('Gerçekleşti');$('k3').textContent=say('İptal');
+  $('bl').innerHTML=rows.map(e=>{const h=`ajanda.html?tab=${tabOf(e.tur)}&tarih=${e.tarih}&id=${e.id}`;
+   return`<div class="pl ${e.durum==='Gerçekleşti'?'ok':e.durum==='İptal'?'ip':''}">
+   <div class="r1"><a href="${h}">🕒 ${esc(e.saat.slice(0,5))} · ${esc(TUR_AD[e.tur]||e.tur)}</a><span><span class="chip">${esc(e.durum)}</span>${canEdit(e)?` <button class="b g" data-pe="${e.id}" style="padding:3px 9px" title="Düzelt">✏️</button>`:''}</span></div>
+   <a class="pa" href="${h}">${hbl(e).length?`<div class="m">${esc(hbl(e).join(', '))}</div>`:''}<p>${esc(e.aciklama)}</p>${e.iptal_nedeni?`<div class="m">İptal nedeni: ${esc(e.iptal_nedeni)}</div>`:''}</a></div>`}).join('')||'<div class="emp">Bu filtrede bugün için plan yok.</div>';
+}
 async function bugunYukle(){
   if(!me)return;
   const bg=new Date(),pz=new Date(bg);pz.setDate(bg.getDate()-((bg.getDay()+6)%7));const cm=new Date(pz);cm.setDate(pz.getDate()+6);
@@ -216,12 +325,57 @@ async function bugunYukle(){
     db.from('ajanda_notlari').select('*').eq('tarih',iso(bg)).order('saat'),
     db.from('ajanda_notlari').select('id,tur,hedef_birimler,ekleyen').gte('tarih',iso(pz)).lte('tarih',iso(cm))]);
   if(a.error){$('bl').innerHTML='<div class="emp">Planlar yüklenemedi.</div>';return}
-  const rows=(a.data||[]).filter(ilgili),say=d=>rows.filter(r=>r.durum===d).length;
-  $('k1').textContent=say('Planlandı');$('k2').textContent=say('Gerçekleşti');$('k3').textContent=say('İptal');
+  todayAll=(a.data||[]).filter(ilgili);
   $('k4').textContent=h.error?'–':(h.data||[]).filter(ilgili).length;
-  $('bl').innerHTML=rows.map(e=>`<a class="pl ${e.durum==='Gerçekleşti'?'ok':e.durum==='İptal'?'ip':''}" href="ajanda.html?tab=${tabOf(e.tur)}&tarih=${e.tarih}&id=${e.id}">
-   <div class="r1"><span>🕒 ${esc(e.saat.slice(0,5))} · ${esc(TUR_AD[e.tur]||e.tur)}</span><span class="chip">${esc(e.durum)}</span></div>
-   ${hbl(e).length?`<div class="m">${esc(hbl(e).join(', '))}</div>`:''}<p>${esc(e.aciklama)}</p></a>`).join('')||'<div class="emp">Bugün için plan yok.</div>';
+  bSecenek();bCiz();
+}
+// ---- Plan düzeltme ----
+function duzenle(id){
+  const e=todayAll.find(x=>x.id==id);if(!e)return;
+  $('ef').reset();$('eid').value=e.id;$('dt').textContent='✏️ Planı düzelt';
+  $('et').innerHTML=`<option>${esc(TUR_AD[e.tur]||e.tur)}</option>`;$('et').disabled=true;
+  if(e.tur==='birim'||e.tur==='nobet'){
+    const l=birimSecenek(e.tur),cur=e.hedef_birimler||[],all=[...new Set([...l,...cur])];
+    $('bw').classList.remove('hide');
+    $('eb').innerHTML=all.map(b=>`<label class="ck"><input type="checkbox" value="${esc(b)}"${cur.includes(b)?' checked':''}> ${esc(b)}</label>`).join('');
+  }else $('bw').classList.add('hide');
+  $('ed').value=e.tarih;$('es').value=e.saat.slice(0,5);$('ea').value=e.aciklama;
+  $('eu').value=e.durum;$('ei').value=e.iptal_nedeni||'';$('iw').classList.toggle('hide',e.durum!=='İptal');
+  $('dw').classList.remove('hide');$('edel').classList.toggle('hide',!canDel(e));$('dlg').showModal();
+}
+$('bl').onclick=e=>{const b=e.target.closest('[data-pe]');if(b)duzenle(b.dataset.pe)};
+$('eu').onchange=()=>$('iw').classList.toggle('hide',$('eu').value!=='İptal');
+async function kaydetDuzelt(id,b){
+  const rec={tarih:$('ed').value,saat:$('es').value,durum:$('eu').value,aciklama:$('ea').value.trim()};
+  rec.iptal_nedeni=rec.durum==='İptal'?$('ei').value.trim():null;
+  if(!rec.aciklama||(rec.durum==='İptal'&&!rec.iptal_nedeni)){b.disabled=false;toast(rec.aciklama?'İptal nedenini yazın.':'Açıklama yazın.');return}
+  if(!$('bw').classList.contains('hide')){
+    const hb=[...document.querySelectorAll('#eb input:checked')].map(i=>i.value);
+    if(!hb.length){b.disabled=false;toast('En az bir birim seçin.');return}
+    rec.hedef_birimler=hb.filter(x=>x!=='SKKM');
+  }
+  const r=await db.from('ajanda_notlari').update(rec).eq('id',id).select('id');
+  b.disabled=false;
+  if(r.error||!r.data||!r.data.length){toast('Kaydedilemedi. Yetkiniz olmayabilir.');return}
+  $('dlg').close();toast('Plan güncellendi.');bugunYukle();rapor();
+}
+$('edel').onclick=async()=>{
+  const id=$('eid').value;if(!id||!confirm('Bu plan silinsin mi?'))return;
+  const r=await db.from('ajanda_notlari').delete().eq('id',id).select('id');
+  if(r.error||!r.data||!r.data.length){toast('Silinemedi.');return}
+  $('dlg').close();toast('Plan silindi.');bugunYukle();rapor();
+};
+// ---- Araç analizi (gb_araclar tablosundan) ----
+async function aracAnaliz(){
+  const{data,error}=await db.from('gb_araclar').select('plaka,model_yili,tur,kullanim');
+  if(error||!data||!data.length){$('aracC').classList.add('hide');return}
+  const yil=new Date().getFullYear(),r=data.filter(x=>x.plaka),k=r.filter(x=>x.kullanim==='112'),ys=k.map(x=>x.model_yili).filter(Boolean);
+  const ort=ys.length?yil-ys.reduce((a,b)=>a+b,0)/ys.length:0;
+  const kova=y=>y<=2010?'1) 2010 ve öncesi':y<=2015?'2) 2011–2015':y<=2020?'3) 2016–2020':'4) 2021 ve sonrası';
+  $('aracB').innerHTML=`<div class="kp"><div class="card"><b>${r.length}</b><span>Toplam araç</span></div><div class="card"><b>${k.length}</b><span>112 kullanımında</span></div>
+   <div class="card"><b>${r.filter(x=>x.kullanim==='VASIFSIZ').length}</b><span>Vasfını yitiren</span></div><div class="card"><b>${ys.length?ort.toFixed(1):'–'}</b><span>112 araçlarında ort. yaş</span></div></div>
+   <div class="g2">${bars('Kullanıma göre',dag(r,x=>x.kullanim))}${bars('Türe göre',dag(r,x=>x.tur))}${bars('112 araçları: model yılı',dag(k.filter(x=>x.model_yili),x=>kova(x.model_yili)).sort((a,b)=>a[0].localeCompare(b[0])).map(([a,b])=>[a.slice(3),b]))}</div>`;
+  $('aracC').classList.remove('hide');
 }
 $('rf').onclick=()=>{bugunYukle();rapor()};
 
@@ -235,12 +389,18 @@ $('et').onchange=birimKutu;
 $('new').onclick=()=>{
   const t=tabsOf(me).filter(canWrite);
   $('et').innerHTML=t.map(k=>`<option value="${k}">${TUR_AD[k]}</option>`).join('');
-  $('ef').reset();$('et').value=t.includes('bashekim')?'bashekim':t[0];
-  $('ed').value=iso(new Date());birimKutu();$('dlg').showModal();
+  $('ef').reset();$('eid').value='';$('dt').textContent='🗓️ Plan ekle';$('et').disabled=false;$('dw').classList.add('hide');$('edel').classList.add('hide');$('et').value=t.includes('bashekim')?'bashekim':t[0];
+  $('ed').value=iso(new Date());birimKutu();
+  const v=$('bsel').value;
+  if(v==='kisisel'&&t.includes('kisisel')){$('et').value='kisisel';birimKutu()}
+  else if(v.startsWith('b:')){const u=v.slice(2),tt=(NOBET.includes(u)||u==='SKKM Birimi')?'nobet':'birim';
+    if(t.includes(tt)){$('et').value=tt;birimKutu();const cb=[...$('eb').querySelectorAll('input')].find(i=>i.value===(u==='SKKM Birimi'?'SKKM':u));if(cb)cb.checked=true}}
+  $('dlg').showModal();
 };
 $('ec').onclick=()=>$('dlg').close();
 $('ef').addEventListener('submit',async e=>{
   e.preventDefault();const b=$('esv');b.disabled=true;
+  if($('eid').value)return kaydetDuzelt($('eid').value,b);
   const tur=$('et').value;
   const rec={tarih:$('ed').value,saat:$('es').value,durum:'Planlandı',aciklama:$('ea').value.trim(),modul:'genel',tur,ekleyen:me.id};
   if(!rec.aciklama){b.disabled=false;return}
@@ -274,6 +434,131 @@ async function rapor(){
 }
 $('rgo').onclick=rapor;$('rprint').onclick=()=>window.print();
 
+// ---- Ortak yardımcılar (yönetim paneli ve şifre için) ----
+const ROL_AD={admin:'Yönetici',baskekim:'Başhekim',birim_kullanicisi:'Birim kullanıcısı',skkm:'SKKM (ortak hesap)'};
+const ortakMi=p=>!!p.ortak||p.rol==='skkm';
+const ilkSifre=ad=>{const w=ad.trim().split(/\s+/).filter(Boolean);return w.length?sade(w[0][0]+w[w.length-1][0])+'123456':''};
+let users=[];
+function openPw(forced){
+  $('pf').reset();$('perr').classList.add('hide');
+  $('pdlg').dataset.f=forced?'1':'';$('pc').classList.toggle('hide',!!forced);$('pnote').classList.toggle('hide',!forced);
+  $('pdlg').showModal();
+}
+$('pdlg').addEventListener('cancel',e=>{if($('pdlg').dataset.f)e.preventDefault()});
+
+$('pwbtn').onclick=()=>openPw(false);
+$('pc').onclick=()=>$('pdlg').close();
+$('pf').addEventListener('submit',async e=>{
+  e.preventDefault();const p1=$('p1').value,er=m=>{$('perr').textContent=m;$('perr').classList.remove('hide')};
+  if(p1!==$('p2').value)return er('Şifreler aynı değil.');
+  if(p1.length<8)return er('Şifre en az 8 karakter olmalı.');
+  if([ilkSifre(me.adsoyad),ilkSifre(me.adsoyad).slice(0,2)+'112'].includes(p1))return er('Başlangıç şifresini kullanamazsınız. Farklı bir şifre seçin.');
+  const{error}=await db.auth.updateUser({password:p1});
+  if(error)return er('Şifre değiştirilemedi. Farklı bir şifre deneyin.');
+  await db.rpc('ilk_sifre_tamam');me.sifre_degisti=true;
+  const ilk=$('pdlg').dataset.f;$('pdlg').dataset.f='';$('pdlg').close();toast('Şifreniz değiştirildi.');if(ilk)bugunYukle(true);
+});
+
+// ---- Yönetici paneli ----
+const setRoles=x=>{const l=['birim_kullanicisi','admin'];if(x&&!l.includes(x))l.push(x);$('ur').innerHTML=l.map(k=>`<option value="${k}">${ROL_AD[k]||k}</option>`).join('')};
+setRoles();
+const ALLB=[['Başhekimlik','Başhekimlik'],...BIRIMLER.map(b=>[b,b])];
+$('ubx').innerHTML=ALLB.map(([v,t])=>`<label class="ck"><input type="checkbox" value="${esc(v)}"> ${esc(t)}</label>`).join('');
+const checks=()=>[...document.querySelectorAll('#ubx input')];
+function resetUser(){
+  $('uf').reset();$('uid').value='';$('un').readOnly=false;delete $('up').dataset.t;
+  $('uft').textContent='Yeni personel tanımla';$('usv').textContent='Personeli kaydet';
+  $('upw').classList.remove('hide');$('up').required=true;$('uakw').classList.add('hide');$('ucn').classList.add('hide');setRoles();$('ur').value='birim_kullanicisi';
+}
+function editUser(u){
+  resetUser();$('uid').value=u.id;$('un').value=u.adsoyad;$('un').readOnly=true;setRoles(u.rol);$('ur').value=u.rol;
+  checks().forEach(c=>c.checked=u.birimler.includes(c.value));
+  $('uak').checked=u.aktif;$('uakw').classList.remove('hide');$('upw').classList.add('hide');$('up').required=false;$('ucn').classList.remove('hide');
+  $('uft').textContent='Personeli düzenle: '+u.adsoyad;$('usv').textContent='Değişiklikleri kaydet';
+  $('adm').scrollTo({top:0,behavior:'smooth'});
+}
+async function loadUsers(){
+  const{data,error}=await db.from('profiles').select('*').order('adsoyad');
+  if(error)return toast('Personel listesi alınamadı.');
+  users=data;
+  $('ulist').innerHTML=users.map(u=>`<div class="ur"><div><b>${esc(u.adsoyad)}</b> ${u.aktif?'':'<span class="chip pas">Pasif</span>'}<small>${esc(ROL_AD[u.rol]||u.rol)}${u.ortak?' · ortak hesap':''} · ${esc(u.birimler.join(', ')||'Birim yok')}</small></div><div class="ua"><button class="b g" data-ue="${u.id}">Düzenle</button><button class="b am" data-ur="${u.id}">Şifre sıfırla</button></div></div>`).join('');
+}
+$('adminbtn').onclick=()=>{resetUser();loadUsers();document.querySelector('#atab button').click();$('adm').showModal()};
+$('atab').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;document.querySelectorAll('#atab button').forEach(x=>x.classList.toggle('on',x===b));$('ap1').classList.toggle('hide',b.dataset.a!=='ap1');$('ap2').classList.toggle('hide',b.dataset.a!=='ap2')};
+$('admx').onclick=()=>$('adm').close();$('ucn').onclick=resetUser;
+$('un').oninput=()=>{if(!$('uid').value&&!$('up').dataset.t)$('up').value=ilkSifre($('un').value)};
+$('up').oninput=()=>{$('up').dataset.t='1'};
+$('ulist').onclick=async e=>{
+  const ue=e.target.closest('[data-ue]'),ur=e.target.closest('[data-ur]');
+  if(ue)return editUser(users.find(u=>u.id===ue.dataset.ue));
+  if(ur){const u=users.find(x=>x.id===ur.dataset.ur);
+    const pw=prompt(u.adsoyad+' için yeni şifre (kişi ilk girişte değiştirecek):',ortakMi(u)?'':ilkSifre(u.adsoyad));
+    if(!pw)return;
+    const{error}=await db.rpc('admin_sifre_sifirla',{p_id:u.id,p_sifre:pw});
+    toast(error?'Hata: '+error.message:'Şifre sıfırlandı. Yeni şifre: '+pw)}
+};
+const yFiltre=()=>({p_bas:$('ybas').value||null,p_bit:$('ybit').value||null,p_tur:$('yk').value||null,p_kisisel:$('ykis').checked});
+const indir=(ad,metin,tip)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([metin],{type:tip}));a.download=ad;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)};
+const damga=()=>iso(new Date())+'_'+new Date().toTimeString().slice(0,5).replace(':','');
+async function yedekCek(){
+  const f=yFiltre();if(f.p_bas&&f.p_bit&&f.p_bas>f.p_bit){toast('Başlangıç tarihi bitişten sonra olamaz.');return null}
+  const{data,error}=await db.rpc('admin_yedek',f);
+  if(error){toast('Hata: '+error.message);return null}
+  return data||[];
+}
+const jsonYedek=r=>JSON.stringify({olusturma:new Date().toISOString(),kayit_sayisi:r.length,notlar:r},null,1);
+$('yjson').onclick=async()=>{const r=await yedekCek();if(!r)return;indir('ajanda_yedek_'+damga()+'.json',jsonYedek(r),'application/json');toast(r.length+' kayıt yedeklendi.')};
+$('ycsv').onclick=async()=>{
+  const r=await yedekCek();if(!r)return;
+  const h=['tarih','saat','durum','ajanda','birim','aciklama','iptal_nedeni','olusturan','olusturma_zamani','son_islem_yapan','son_islem_zamani','gorevlendirme','ekip_adi','ekip_kodu'];
+  const c=v=>{v=String(v??'');if(/^[=+\-@]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"'};
+  const sat=r.map(e=>[e.tarih,String(e.saat).slice(0,5),e.durum,(TUR_AD[e.tur]||e.tur),hbl(e).join(', '),e.aciklama,e.iptal_nedeni,e.ekleyen_ad,e.created_at,e.guncelleyen_ad,e.guncelleyen?e.updated_at:'',e.gorevlendirme?'Evet':'Hayır',e.ekip_adi,e.ekip_kodu].map(c).join(';'));
+  indir('ajanda_yedek_'+damga()+'.csv','\ufeff'+h.join(';')+'\r\n'+sat.join('\r\n'),'text/csv;charset=utf-8');toast(r.length+' kayıt indirildi.');
+};
+$('ysil').onclick=async()=>{
+  const r=await yedekCek();if(!r)return;
+  if(!r.length)return toast('Seçilen kapsamda silinecek kayıt yok.');
+  const t=prompt(r.length+' kayıt kalıcı olarak silinecek. Önce yedek dosyası indirilecek.\nOnaylamak için SİL yazın:');
+  if(!t||sade(t.trim())!=='sil')return toast('Silme iptal edildi.');
+  indir('silinen_kayitlar_'+damga()+'.json',jsonYedek(r),'application/json');
+  const{data,error}=await db.rpc('admin_notlari_sil',yFiltre());
+  if(error)return toast('Hata: '+error.message);
+  toast(data+' kayıt silindi.');rapor();bugunYukle();
+};
+$('yyuk').onclick=async()=>{
+  const f=$('yf').files[0];if(!f)return toast('Önce bir yedek dosyası seçin.');
+  let liste;
+  try{const j=JSON.parse(await f.text());liste=Array.isArray(j)?j:j.notlar}catch(e){return toast('Dosya okunamadı. Geçerli bir JSON yedeği seçin.')}
+  if(!Array.isArray(liste)||!liste.length)return toast('Dosyada geri yüklenecek kayıt yok.');
+  const g=liste.filter(x=>x&&x.id&&x.modul&&x.tur&&x.ekleyen&&x.tarih&&x.saat&&x.durum&&x.aciklama);
+  if(!g.length)return toast('Dosya biçimi tanınmadı.');
+  if(!confirm(g.length+' kayıt bulundu'+(g.length<liste.length?' ('+(liste.length-g.length)+' eksik kayıt yok sayılacak)':'')+'.\nSistemde zaten olan kayıtlar atlanır. Geri yüklensin mi?'))return;
+  const b=$('yyuk');b.disabled=true;const t={eklenen:0,atlanan:0,hatali:0};
+  for(let i=0;i<g.length;i+=300){
+    const{data,error}=await db.rpc('admin_yedek_yukle',{p_notlar:g.slice(i,i+300)});
+    if(error){b.disabled=false;return toast('Hata: '+error.message)}
+    t.eklenen+=data.eklenen;t.atlanan+=data.atlanan;t.hatali+=data.hatali;
+  }
+  b.disabled=false;$('yf').value='';
+  toast('Geri yükleme bitti: '+t.eklenen+' eklendi, '+t.atlanan+' zaten vardı, '+t.hatali+' yüklenemedi.');
+  rapor();bugunYukle();
+};
+$('uf').addEventListener('submit',async e=>{
+  e.preventDefault();const b=$('usv');b.disabled=true;
+  const birimler=checks().filter(c=>c.checked).map(c=>c.value),uid=$('uid').value;
+  const rol=$('ur').value;
+  if(uid){const u0=users.find(x=>x.id===uid);if(u0&&u0.birimler.includes('SKKM')&&!birimler.includes('SKKM'))birimler.push('SKKM')}
+  const{error}=uid
+    ?await db.rpc('admin_profil_guncelle',{p_id:uid,p_rol:rol,p_birimler:birimler,p_aktif:$('uak').checked})
+    :await db.rpc('admin_kullanici_ekle',{p_ad:$('un').value.trim(),p_rol:rol,p_birimler:birimler,p_sifre:$('up').value});
+  b.disabled=false;
+  if(error)return toast('Hata: '+error.message);
+  toast(uid?'Personel güncellendi.':'Personel eklendi. Giriş: '+$('un').value.trim()+' / '+$('up').value);
+  resetUser();loadUsers();
+});
+
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 enter();
 </script>
 </body>

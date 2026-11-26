@@ -201,7 +201,7 @@ body{background:#fff;display:block;min-height:0}
     <div><h1><svg class="amb" viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg>Çanakkale İASB Kurumsal Ajanda</h1><small>Çanakkale İASB</small></div>
     <div class="ub"><span id="clk"></span><b id="who" style="font-size:12px"></b>
       <a class="b bl" href="index.html" style="text-decoration:none;border:1px solid rgba(255,255,255,.55)">🏠 Ana sayfa</a>
-      <button class="b am hide" id="adminbtn">🛡️ Yönetim</button>
+      <a class="b am hide" id="adminbtn" href="index.html?yonetim=1" style="text-decoration:none">🛡️ Yönetim</a>
       <button class="b bl" id="pwbtn">🔑 Şifre</button>
       <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
   </div></header>
@@ -263,49 +263,6 @@ body{background:#fff;display:block;min-height:0}
   </form>
 </dialog>
 
-<dialog id="adm">
-  <div style="display:flex;justify-content:space-between;align-items:center"><h2>🛡️ Yönetici, personel ve yetki yönetimi</h2><button class="b g" id="admx">Kapat</button></div>
-  <div class="atab" id="atab"><button type="button" data-a="ap1" class="on">👥 Kullanıcı yönetimi</button><button type="button" data-a="ap2">🗄️ Veri yönetimi</button></div>
-  <div id="ap1">
-  <form id="uf" class="pn" style="margin-top:12px">
-    <h3 id="uft" style="margin-top:0">Yeni personel tanımla</h3>
-    <input type="hidden" id="uid">
-    <div class="g3">
-      <div><label for="un">Ad soyad</label><input id="un" required></div>
-      <div><label for="ur">Yetki</label><select id="ur"></select></div>
-      <div id="upw"><label for="up">Başlangıç şifresi</label><input id="up" required></div>
-    </div>
-    <label>Birimler</label><div class="ubx" id="ubx"></div>
-    <div style="font-size:11px;color:#64748b;margin-top:6px">“SKKM Birimi” seçilen kişi SKKM ajandasını görür ve not/plan ekler. SKKM ajandası ayrıca yöneticilere açıktır. “SKKM” hesabı tek ortak kullanıcıdır, buradan tanımlanmaz.</div>
-    <label class="ck hide" id="uakw" style="margin-top:10px"><input type="checkbox" id="uak" checked> Hesap aktif (kapatılırsa giriş yapamaz)</label>
-    <div class="btns"><button class="b em" id="usv">Personeli kaydet</button><button type="button" class="b g hide" id="ucn">Düzenlemeyi iptal et</button></div>
-  </form>
-  <h3>Kayıtlı personel</h3>
-  <div id="ulist" style="max-height:300px;overflow:auto"></div>
-  </div>
-  <div id="ap2" class="hide">
-  <h3 style="margin-top:0">Yedekleme ve veri temizliği</h3>
-  <div class="pn">
-    <div class="row">
-      <div><label for="yk">Ajanda</label><select id="yk"><option value="">Tüm ortak ajandalar</option><option value="bashekim">Başhekim</option><option value="birim">Birim (Mesai)</option><option value="nobet">Birim (Nöbet)</option><option value="koordinasyon">SKKM</option></select></div>
-      <div><label class="ck" style="margin-top:28px"><input type="checkbox" id="ykis"> Kişisel ajandaları da dahil et</label></div>
-    </div>
-    <div class="row">
-      <div><label for="ybas">Başlangıç tarihi (boşsa en baştan)</label><input type="date" id="ybas"></div>
-      <div><label for="ybit">Bitiş tarihi (boşsa en sona)</label><input type="date" id="ybit"></div>
-    </div>
-    <div class="btns" style="flex-wrap:wrap"><button type="button" class="b em" id="yjson">⬇️ Yedeği indir (JSON)</button><button type="button" class="b em" id="ycsv">⬇️ Excel için CSV</button><button type="button" class="b ro" id="ysil">🗑️ Seçili kayıtları sil</button></div>
-    <p style="font-size:11px;color:#64748b;margin:8px 0 0">Silmeden önce yedek dosyası otomatik indirilir ve onay için SİL yazmanız istenir. Kişisel ajandalar kişilerin özel notlarıdır, gerekmedikçe dahil etmeyin.</p>
-  </div>
-  <h3>Yedekten geri yükle</h3>
-  <div class="pn">
-    <label for="yf">Yedek dosyası (.json)</label>
-    <input type="file" id="yf" accept=".json,application/json">
-    <div class="btns"><button type="button" class="b" id="yyuk">♻️ Yedekten geri yükle</button></div>
-    <p style="font-size:11px;color:#64748b;margin:8px 0 0">Daha önce indirdiğiniz JSON yedeğini seçin. Sistemde zaten bulunan kayıtlar atlanır, üzerine yazılmaz. Sahibi sistemde bulunmayan kayıtlar yüklenmez.</p>
-  </div>
-  </div>
-</dialog>
 <dialog id="adlg">
   <form id="af">
     <h2>📤 Birim ajandasına aktar</h2>
@@ -609,104 +566,6 @@ $('pf').addEventListener('submit',async e=>{
   if(error)return er('Şifre değiştirilemedi. Farklı bir şifre deneyin.');
   await db.rpc('ilk_sifre_tamam');me.sifre_degisti=true;
   const ilk=$('pdlg').dataset.f;$('pdlg').dataset.f='';$('pdlg').close();toast('Şifreniz değiştirildi.');if(ilk)bugunYukle(true);
-});
-
-// ---- Yönetici paneli ----
-const setRoles=x=>{const l=['birim_kullanicisi','admin'];if(x&&!l.includes(x))l.push(x);$('ur').innerHTML=l.map(k=>`<option value="${k}">${ROL_AD[k]||k}</option>`).join('')};
-setRoles();
-const ALLB=[['Başhekimlik','Başhekimlik'],...BIRIMLER.map(b=>[b,b])];
-$('ubx').innerHTML=ALLB.map(([v,t])=>`<label class="ck"><input type="checkbox" value="${esc(v)}"> ${esc(t)}</label>`).join('');
-const checks=()=>[...document.querySelectorAll('#ubx input')];
-function resetUser(){
-  $('uf').reset();$('uid').value='';$('un').readOnly=false;delete $('up').dataset.t;
-  $('uft').textContent='Yeni personel tanımla';$('usv').textContent='Personeli kaydet';
-  $('upw').classList.remove('hide');$('up').required=true;$('uakw').classList.add('hide');$('ucn').classList.add('hide');setRoles();$('ur').value='birim_kullanicisi';
-}
-function editUser(u){
-  resetUser();$('uid').value=u.id;$('un').value=u.adsoyad;$('un').readOnly=true;setRoles(u.rol);$('ur').value=u.rol;
-  checks().forEach(c=>c.checked=u.birimler.includes(c.value));
-  $('uak').checked=u.aktif;$('uakw').classList.remove('hide');$('upw').classList.add('hide');$('up').required=false;$('ucn').classList.remove('hide');
-  $('uft').textContent='Personeli düzenle: '+u.adsoyad;$('usv').textContent='Değişiklikleri kaydet';
-  $('adm').scrollTo({top:0,behavior:'smooth'});
-}
-async function loadUsers(){
-  const{data,error}=await db.from('profiles').select('*').order('adsoyad');
-  if(error)return toast('Personel listesi alınamadı.');
-  users=data;
-  $('ulist').innerHTML=users.map(u=>`<div class="ur"><div><b>${esc(u.adsoyad)}</b> ${u.aktif?'':'<span class="pl pas">Pasif</span>'}<small>${esc(ROL_AD[u.rol]||u.rol)}${u.ortak?' · ortak hesap':''} · ${esc(u.birimler.join(', ')||'Birim yok')}</small></div><div class="ua"><button class="b g" data-ue="${u.id}">Düzenle</button><button class="b am" data-ur="${u.id}">Şifre sıfırla</button></div></div>`).join('');
-}
-$('adminbtn').onclick=()=>{resetUser();loadUsers();document.querySelector('#atab button').click();$('adm').showModal()};
-$('atab').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;document.querySelectorAll('#atab button').forEach(x=>x.classList.toggle('on',x===b));$('ap1').classList.toggle('hide',b.dataset.a!=='ap1');$('ap2').classList.toggle('hide',b.dataset.a!=='ap2')};
-$('admx').onclick=()=>$('adm').close();$('ucn').onclick=resetUser;
-$('un').oninput=()=>{if(!$('uid').value&&!$('up').dataset.t)$('up').value=ilkSifre($('un').value)};
-$('up').oninput=()=>{$('up').dataset.t='1'};
-$('ulist').onclick=async e=>{
-  const ue=e.target.closest('[data-ue]'),ur=e.target.closest('[data-ur]');
-  if(ue)return editUser(users.find(u=>u.id===ue.dataset.ue));
-  if(ur){const u=users.find(x=>x.id===ur.dataset.ur);
-    const pw=prompt(u.adsoyad+' için yeni şifre (kişi ilk girişte değiştirecek):',ortakMi(u)?'':ilkSifre(u.adsoyad));
-    if(!pw)return;
-    const{error}=await db.rpc('admin_sifre_sifirla',{p_id:u.id,p_sifre:pw});
-    toast(error?'Hata: '+error.message:'Şifre sıfırlandı. Yeni şifre: '+pw)}
-};
-const yFiltre=()=>({p_bas:$('ybas').value||null,p_bit:$('ybit').value||null,p_tur:$('yk').value||null,p_kisisel:$('ykis').checked});
-const indir=(ad,metin,tip)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([metin],{type:tip}));a.download=ad;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)};
-const damga=()=>iso(new Date())+'_'+new Date().toTimeString().slice(0,5).replace(':','');
-async function yedekCek(){
-  const f=yFiltre();if(f.p_bas&&f.p_bit&&f.p_bas>f.p_bit){toast('Başlangıç tarihi bitişten sonra olamaz.');return null}
-  const{data,error}=await db.rpc('admin_yedek',f);
-  if(error){toast('Hata: '+error.message);return null}
-  return data||[];
-}
-const jsonYedek=r=>JSON.stringify({olusturma:new Date().toISOString(),kayit_sayisi:r.length,notlar:r},null,1);
-$('yjson').onclick=async()=>{const r=await yedekCek();if(!r)return;indir('ajanda_yedek_'+damga()+'.json',jsonYedek(r),'application/json');toast(r.length+' kayıt yedeklendi.')};
-$('ycsv').onclick=async()=>{
-  const r=await yedekCek();if(!r)return;
-  const h=['tarih','saat','durum','ajanda','birim','aciklama','iptal_nedeni','olusturan','olusturma_zamani','son_islem_yapan','son_islem_zamani','gorevlendirme','ekip_adi','ekip_kodu'];
-  const c=v=>{v=String(v??'');if(/^[=+\-@]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"'};
-  const sat=r.map(e=>[e.tarih,String(e.saat).slice(0,5),e.durum,(TABS[e.tur]||[e.tur])[0],hbl(e).join(', '),e.aciklama,e.iptal_nedeni,e.ekleyen_ad,e.created_at,e.guncelleyen_ad,e.guncelleyen?e.updated_at:'',e.gorevlendirme?'Evet':'Hayır',e.ekip_adi,e.ekip_kodu].map(c).join(';'));
-  indir('ajanda_yedek_'+damga()+'.csv','\ufeff'+h.join(';')+'\r\n'+sat.join('\r\n'),'text/csv;charset=utf-8');toast(r.length+' kayıt indirildi.');
-};
-$('ysil').onclick=async()=>{
-  const r=await yedekCek();if(!r)return;
-  if(!r.length)return toast('Seçilen kapsamda silinecek kayıt yok.');
-  const t=prompt(r.length+' kayıt kalıcı olarak silinecek. Önce yedek dosyası indirilecek.\nOnaylamak için SİL yazın:');
-  if(!t||sade(t.trim())!=='sil')return toast('Silme iptal edildi.');
-  indir('silinen_kayitlar_'+damga()+'.json',jsonYedek(r),'application/json');
-  const{data,error}=await db.rpc('admin_notlari_sil',yFiltre());
-  if(error)return toast('Hata: '+error.message);
-  toast(data+' kayıt silindi.');load();bugunYukle(false);
-};
-$('yyuk').onclick=async()=>{
-  const f=$('yf').files[0];if(!f)return toast('Önce bir yedek dosyası seçin.');
-  let liste;
-  try{const j=JSON.parse(await f.text());liste=Array.isArray(j)?j:j.notlar}catch(e){return toast('Dosya okunamadı. Geçerli bir JSON yedeği seçin.')}
-  if(!Array.isArray(liste)||!liste.length)return toast('Dosyada geri yüklenecek kayıt yok.');
-  const g=liste.filter(x=>x&&x.id&&x.modul&&x.tur&&x.ekleyen&&x.tarih&&x.saat&&x.durum&&x.aciklama);
-  if(!g.length)return toast('Dosya biçimi tanınmadı.');
-  if(!confirm(g.length+' kayıt bulundu'+(g.length<liste.length?' ('+(liste.length-g.length)+' eksik kayıt yok sayılacak)':'')+'.\nSistemde zaten olan kayıtlar atlanır. Geri yüklensin mi?'))return;
-  const b=$('yyuk');b.disabled=true;const t={eklenen:0,atlanan:0,hatali:0};
-  for(let i=0;i<g.length;i+=300){
-    const{data,error}=await db.rpc('admin_yedek_yukle',{p_notlar:g.slice(i,i+300)});
-    if(error){b.disabled=false;return toast('Hata: '+error.message)}
-    t.eklenen+=data.eklenen;t.atlanan+=data.atlanan;t.hatali+=data.hatali;
-  }
-  b.disabled=false;$('yf').value='';
-  toast('Geri yükleme bitti: '+t.eklenen+' eklendi, '+t.atlanan+' zaten vardı, '+t.hatali+' yüklenemedi.');
-  load();bugunYukle(false);
-};
-$('uf').addEventListener('submit',async e=>{
-  e.preventDefault();const b=$('usv');b.disabled=true;
-  const birimler=checks().filter(c=>c.checked).map(c=>c.value),uid=$('uid').value;
-  const rol=$('ur').value;
-  if(uid){const u0=users.find(x=>x.id===uid);if(u0&&u0.birimler.includes('SKKM')&&!birimler.includes('SKKM'))birimler.push('SKKM')}
-  const{error}=uid
-    ?await db.rpc('admin_profil_guncelle',{p_id:uid,p_rol:rol,p_birimler:birimler,p_aktif:$('uak').checked})
-    :await db.rpc('admin_kullanici_ekle',{p_ad:$('un').value.trim(),p_rol:rol,p_birimler:birimler,p_sifre:$('up').value});
-  b.disabled=false;
-  if(error)return toast('Hata: '+error.message);
-  toast(uid?'Personel güncellendi.':'Personel eklendi. Giriş: '+$('un').value.trim()+' / '+$('up').value);
-  resetUser();loadUsers();
 });
 
 // ---- Kişisel notu birim ajandasına aktarma ----
