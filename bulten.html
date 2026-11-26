@@ -77,7 +77,8 @@ dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#47
 .pl a{color:inherit;text-decoration:none}.pl .r1>a{flex:1}.pl .pa{display:block}
 @media print{header,nav,#tabs,.noprint{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
 
-.ub label{margin:0;color:#fff;text-transform:none;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+.donem{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.donem label{margin:0;color:#334155;text-transform:none;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
 #week{width:92px;padding:5px 9px}#range{width:140px;padding:5px 9px}
 #period{font-size:12px}
 #tabs{max-width:1200px;margin:0 auto;display:flex;gap:6px;padding:12px 16px 0;overflow-x:auto}
@@ -108,19 +109,22 @@ td input:focus,textarea:focus{outline:2px solid #f59e0b;outline-offset:0}
 td input:disabled,textarea:disabled{background:#f1f5f9;color:#475569}
 textarea{background:#fff;color:#0f172a;font-size:13px;min-height:90px}
 .card h3{font-size:15px;padding-bottom:6px;border-bottom:2px solid var(--l)}
+#app{display:flex;flex-direction:column;min-height:100vh}
+main{max-width:1400px;width:100%;flex:1}
+#tabs{max-width:1400px;width:100%}
 </style></head><body>
-<div id="login" style="display:none"><div class="card"><h2 style="margin:0">📰 Haftalık Bülten</h2>
+<div id="login" style="display:none"><div class="card"><h2 style="margin:0;text-align:center"><svg viewBox="0 0 48 32" width="46" height="31" fill="none" stroke="#1e2f4f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg><br>Çanakkale İASB / Haftalık Bülten</h2>
 <form id="lf"><b>Ajanda hesabınla giriş yap</b><input id="em" placeholder="Kullanıcı adı / e-posta" required><input id="pw" type="password" placeholder="Şifre" required><button class="b" style="padding:11px">Giriş</button></form>
-<small id="le" style="color:#be123c"></small><button id="lo" type="button" class="b g">Çıkış / başka kullanıcı</button></div></div>
-<div id="app"><header class="top"><div class="hi"><h1>📰 Haftalık Bülten</h1>
-<div class="ub"><label class="adm">Hafta <input id="week" placeholder="2026-38"></label>
-<label class="adm">Tarih aralığı <input id="range" placeholder="11-18.09.2026"></label>
-<span id="period"></span><b id="who" style="font-size:12px"></b><button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div></div></header>
-<nav><div><a href="index.html">🏠 Ana Sayfa</a><a href="ajanda.html">🗓️ Ajanda</a><a href="bulten.html" class="on">📰 Bülten</a><a href="genel-bilgiler.html">ℹ️ Genel Bilgiler</a></div></nav>
+<small id="le" style="color:#be123c"></small><button id="lo" type="button" class="b g">Çıkış / başka kullanıcı</button><div class="ort-giris" data-ort-alt></div></div></div>
+<div id="app"><div id="ortak-ust" data-sayfa="bulten"></div>
+<script src="ortak.js"></script>
 <div id="tabs"></div>
 <main><div class="bar"><button id="save" class="b">💾 Bu haftayı kaydet</button><button id="approve" class="b am"></button><span id="status"></span>
-<span style="flex:1"></span><button id="export" class="b em">📊 Sunuyu oluştur</button>
-<button id="roll" class="b ro" title="Haftayı onayla, geçmişi sil, yeni haftaya geç">🔄 Onayla ve geçmişi sil</button></div><div id="err" class="noprint" style="color:#be123c;margin-bottom:10px"></div><div id="form"></div></main></div>
+<span style="flex:1"></span>
+<div class="donem"><label class="adm">Hafta <input id="week" placeholder="2026-38"></label>
+<label class="adm">Tarih aralığı <input id="range" placeholder="11-18.09.2026"></label>
+<span id="period"></span></div><button id="export" class="b em">📊 Sunuyu oluştur</button>
+<button id="roll" class="b ro" title="Haftayı onayla, geçmişi sil, yeni haftaya geç">🔄 Onayla ve geçmişi sil</button></div><div id="err" class="noprint" style="color:#be123c;margin-bottom:10px"></div><div id="form"></div></main><footer class="ort-alt" data-ort-alt></footer></div>
 <div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="bulten-config.js"></script><script src="bulten-app.js"></script></body></html>

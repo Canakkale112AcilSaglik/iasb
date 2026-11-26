@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="112 İASB">
-<title>Çanakkale 112 İASB</title>
+<title>Çanakkale İASB / Dashboard</title>
 <meta name="theme-color" content="#1e2f4f">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
 <style>
@@ -33,14 +33,6 @@ input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;borde
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
 #login .card{width:min(420px,100%);padding:28px}
 #login h1{font-size:19px;text-align:center;margin:0 0 12px}
-header.top{background:var(--c);color:#fff;padding:14px 16px}
-.hi{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
-header h1{font-size:21px;margin:0}
-.ub{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:8px 14px}
-nav{background:#fff;border-bottom:1px solid #e2e8f0}
-nav div{max-width:1200px;margin:0 auto;display:flex;gap:6px;padding:0 16px;overflow-x:auto}
-nav a{padding:12px 16px;font-weight:600;color:#64748b;border-bottom:3px solid transparent;white-space:nowrap;text-decoration:none}
-nav a:hover{color:#1e293b}nav a.on{color:var(--c);border-bottom-color:var(--c)}
 main{max-width:1200px;margin:0 auto;padding:16px}
 .kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
 .kp .card b{display:block;font-size:28px;color:var(--c)}.kp .card span{color:#64748b;font-size:12px}
@@ -82,37 +74,47 @@ dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#47
 .atab button.on{color:var(--c);border-bottom-color:var(--c)}
 @media(max-width:700px){.g3{grid-template-columns:1fr}.ur{flex-direction:column;align-items:flex-start}}
 .pl a{color:inherit;text-decoration:none}.pl .r1>a{flex:1}.pl .pa{display:block}
-@media print{header,nav,.kp,.noprint,#bugunC,#aracC{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
+@media print{header,nav,.kp,.noprint,#bugunC,#istC,#aracC{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
+#app{display:flex;flex-direction:column;min-height:100vh}
+main{max-width:1400px;width:100%;flex:1}
+.gic{width:64px;height:64px;border-radius:16px;background:var(--l);display:grid;place-items:center;margin:0 auto 12px}
+.gic svg{width:46px;height:31px;fill:none;stroke:var(--c);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ozet .card{--r:#2a78d6;--z:#e6f0fc;background:var(--z);border-color:var(--r);border-left-width:6px}
+.ozet .card:nth-child(2){--r:#008300;--z:#e5f4e5}
+.ozet .card:nth-child(3){--r:#e34948;--z:#fdeaea}
+.ozet .card:nth-child(4){--r:#4a3aa7;--z:#eeebfa}
+.kp.ozet .card b{color:#0f172a;font-size:32px}.kp.ozet .card span{color:#334155;font-weight:600}
+#bugunC,#istC,#aracC,#raporC{border-top:5px solid var(--r)}
+#bugunC{--r:#2a78d6}#istC{--r:#1baf7a}#aracC{--r:#eb6834}#raporC{--r:#4a3aa7}
+#aracC .kp .card{background:#fef1ea;border-color:#f6c9b3}
+.grafik{background:#f8fafc}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:12px}
+.tip{border:1px solid var(--r);border-top-width:6px;border-radius:12px;padding:10px;text-align:center;background:#fff;background:color-mix(in srgb,var(--r) 12%,#fff)}
+.tip span{display:block;font-weight:700;color:#334155}.tip b{display:block;font-size:30px;line-height:1.2;color:#0f172a}.tip small{color:#475569}
+.ilt th,.ilt td{text-align:center}.ilt th:first-child,.ilt td:first-child{text-align:left}
+.ilt i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+@media print{#raporC{border-top:0}}
 </style>
 </head>
 <body>
 <div id="login" class="hide">
  <form class="card" id="lf">
-   <h1>Çanakkale 112 İASB</h1>
+   <div class="gic"><svg class="amb" viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg></div>
+   <h1>Çanakkale İASB / Dashboard</h1>
   <label for="lu">Kullanıcı seçin</label><select id="lu"></select>
   <div id="mw" class="hide"><label for="ad">Ad soyad</label><input id="ad"></div>
   <label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password" required>
   <div class="err hide" id="lerr"></div>
   <button class="b" id="lbtn" style="width:100%;margin-top:16px;padding:11px">🔓 Giriş yap</button>
+  <div class="ort-giris" data-ort-alt></div>
  </form>
 </div>
 
 <div id="app" class="hide">
- <header class="top"><div class="hi">
-  <h1>🚑 Çanakkale 112 İASB</h1>
-  <div class="ub"><span id="clk"></span><b id="who" style="font-size:12px"></b>
-   <button class="b am hide" id="adminbtn">🛡️ Yönetim</button>
-   <button class="b bl" id="pwbtn">🔑 Şifre</button>
-   <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
- </div></header>
- <nav><div>
-  <a href="index.html" class="on">🏠 Ana Sayfa</a>
-  <a href="ajanda.html">🗓️ Ajanda</a>
-  <a href="bulten.html">📰 Bülten</a>
-  <a href="genel-bilgiler.html">ℹ️ Genel Bilgiler</a>
- </div></nav>
+<div id="ortak-ust" data-sayfa="index"></div>
+<script src="ortak.js"></script>
  <main>
-  <div class="kp">
+  <div class="kp ozet">
    <div class="card"><b id="k1">–</b><span>Bugün planlanan</span></div>
    <div class="card"><b id="k2">–</b><span>Bugün gerçekleşen</span></div>
    <div class="card"><b id="k3">–</b><span>Bugün iptal</span></div>
@@ -125,12 +127,17 @@ dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#47
    <div id="bl"></div>
   </div>
 
+  <div class="card hide" id="istC" style="margin-bottom:14px">
+   <div class="tb"><h2>📍 İstasyon türleri <span class="chip" id="istN"></span></h2><a class="b g" href="genel-bilgiler.html">Ayrıntı →</a></div>
+   <div id="istB"></div>
+  </div>
+
   <div class="card hide" id="aracC" style="margin-bottom:14px">
    <div class="tb"><h2>🚑 Araç analizi</h2><a class="b g" href="genel-bilgiler.html">Ayrıntı →</a></div>
    <div id="aracB"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="raporC">
    <div class="tb noprint"><h2>📊 Plan raporu</h2>
     <button class="b g" id="rprint">🖨️ Yazdır / PDF</button></div>
    <div class="row noprint">
@@ -142,6 +149,7 @@ dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#47
    <div id="rap" style="margin-top:14px"></div>
   </div>
  </main>
+ <footer class="ort-alt" data-ort-alt></footer>
 </div>
 
 <dialog id="dlg">
@@ -245,7 +253,7 @@ const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+Stri
 const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const fmt=s=>s.split('-').reverse().join('.');
 const hbl=e=>e.tur==='koordinasyon'?['SKKM']:(e.hedef_birimler||[]);
-let me=null,clkH=null,yenH=null;
+let me=null,yenH=null;
 
 const isMgr=()=>me&&['admin','baskekim'].includes(me.rol);
 const myB=()=>me.birimler.filter(b=>b!=='SKKM');
@@ -257,7 +265,7 @@ const canWrite=t=>t==='bashekim'?isMgr():t==='birim'?(isMgr()||myB().some(b=>MES
 const birimSecenek=t=>t==='nobet'?[...(skkmYetkili()?['SKKM']:[]),...(isMgr()?NOBET:myB().filter(b=>NOBET.includes(b)))]:(isMgr()?MESAI:myB().filter(b=>MESAI.includes(b)));
 
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hide');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add('hide'),4000)}
-function showLogin(msg){me=null;clearInterval(clkH);clearInterval(yenH);$('app').classList.add('hide');$('login').classList.remove('hide');
+function showLogin(msg){me=null;clearInterval(yenH);$('app').classList.add('hide');$('login').classList.remove('hide');
   $('lerr').textContent=msg||'';$('lerr').classList.toggle('hide',!msg);$('pw').value='';loadLoginList()}
 async function loadLoginList(){
   const{data,error}=await db.rpc('giris_listesi');
@@ -277,7 +285,6 @@ $('lf').addEventListener('submit',async e=>{
   await enter();
 });
 $('out').onclick=async()=>{await db.auth.signOut();showLogin()};
-const saatYaz=()=>{const n=new Date();$('clk').textContent=n.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',weekday:'long'})+' · '+n.toLocaleTimeString('tr-TR')};
 
 async function enter(){
   const{data:{user}}=await db.auth.getUser();
@@ -286,18 +293,21 @@ async function enter(){
   if(!p||!p.aktif||!tabsOf(p)){await db.auth.signOut();return showLogin('Hesap pasif veya yetkisiz.')}
   me=p;
   $('login').classList.add('hide');$('app').classList.remove('hide');
-  $('pwbtn').classList.toggle('hide',ortakMi(p));$('adminbtn').classList.toggle('hide',p.rol!=='admin');
-  $('who').textContent='👤 '+p.adsoyad+' ('+(p.rol==='admin'?'Yönetici':p.rol==='baskekim'?'Başhekim':p.birimler.join(', '))+')';
+  ortakKullanici(p);
   $('new').classList.toggle('hide',!tabsOf(p).some(canWrite)||p.rol==='skkm');
   const t=tabsOf(p);
   $('rt').innerHTML='<option value="">Tümü</option>'+t.map(k=>`<option value="${k}">${TUR_AD[k]}</option>`).join('');
   const bg=new Date(),pz=new Date(bg);pz.setDate(bg.getDate()-((bg.getDay()+6)%7));
   if(!$('r1').value){$('r1').value=iso(pz);$('r2').value=iso(bg)}
-  clearInterval(clkH);saatYaz();clkH=setInterval(saatYaz,1000);
   clearInterval(yenH);yenH=setInterval(bugunYukle,120000);
-  bugunYukle();rapor();aracAnaliz();
+  bugunYukle();rapor();istAnaliz();aracAnaliz();
+  // Diğer sayfalardaki Yönetim / Şifre düğmeleri buraya yönlendirir; pencere kapanınca o sayfaya dönülür.
+  const q=new URLSearchParams(location.search),don=['ajanda.html','bulten.html','genel-bilgiler.html'].find(x=>x===q.get('don'));
+  if(location.search)history.replaceState(null,'',location.pathname);
+  const ac=d=>{if(don)$(d).addEventListener('close',()=>{location.href=don},{once:true})};
   if(!p.sifre_degisti&&!ortakMi(p))openPw(true);
-  else if(p.rol==='admin'&&new URLSearchParams(location.search).get('yonetim'))$('adminbtn').click();
+  else if(p.rol==='admin'&&q.get('yonetim')){$('adminbtn').click();ac('adm')}
+  else if(q.get('sifre')&&!ortakMi(p)){openPw(false);ac('pdlg')}
 }
 
 let todayAll=[];
@@ -371,6 +381,20 @@ $('edel').onclick=async()=>{
   if(r.error||!r.data||!r.data.length){toast('Silinemedi.');return}
   $('dlg').close();toast('Plan silindi.');bugunYukle();rapor();
 };
+// ---- İstasyon türleri (gb_istasyonlar tablosundan) ----
+const RENK=['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834'];
+async function istAnaliz(){
+  const{data,error}=await db.from('gb_istasyonlar').select('ilce,istasyon,tip').limit(5000);
+  if(error||!data||!data.length){$('istC').classList.add('hide');return}
+  const tipi=x=>String(x.tip??'').trim().toLocaleUpperCase('tr-TR')||'Belirtilmemiş';
+  const tur=dag(data,tipi).sort((a,b)=>(a[0]==='Belirtilmemiş')-(b[0]==='Belirtilmemiş')||a[0].localeCompare(b[0],'tr',{numeric:true}));
+  const renk=i=>tur[i][0]==='Belirtilmemiş'?'#94a3b8':RENK[i]||'#94a3b8';
+  $('istN').textContent=data.length+' istasyon';
+  $('istB').innerHTML=`<div class="tips">${tur.map(([k,v],i)=>`<div class="tip" style="--r:${renk(i)}"><span>${esc(k)}</span><b>${v}</b><small>%${Math.round(v/data.length*100)}</small></div>`).join('')}</div>
+   <div class="sc"><table class="ilt"><thead><tr><th>İlçe</th>${tur.map(([k],i)=>`<th><i style="background:${renk(i)}"></i>${esc(k)}</th>`).join('')}<th>Toplam</th></tr></thead><tbody>${dag(data,x=>x.ilce||'Belirtilmemiş').map(([il,n])=>`<tr><td>${esc(il)}</td>${tur.map(([k])=>`<td>${data.filter(x=>(x.ilce||'Belirtilmemiş')===il&&tipi(x)===k).length||'–'}</td>`).join('')}<td><b>${n}</b></td></tr>`).join('')}</tbody></table></div>`;
+  $('istC').classList.remove('hide');
+}
+
 // ---- Araç analizi (gb_araclar tablosundan) ----
 async function aracAnaliz(){
   const{data,error}=await db.from('gb_araclar').select('plaka,model_yili,tur,kullanim');
@@ -380,7 +404,7 @@ async function aracAnaliz(){
   const kova=y=>y<=2010?'1) 2010 ve öncesi':y<=2015?'2) 2011–2015':y<=2020?'3) 2016–2020':'4) 2021 ve sonrası';
   $('aracB').innerHTML=`<div class="kp"><div class="card"><b>${r.length}</b><span>Toplam araç</span></div><div class="card"><b>${k.length}</b><span>112 kullanımında</span></div>
    <div class="card"><b>${r.filter(x=>x.kullanim==='UMKE').length}</b><span>UMKE araçları</span></div><div class="card"><b>${ys.length?ort.toFixed(1):'–'}</b><span>112 araçlarında ort. yaş</span></div></div>
-   <div class="g2">${bars('Kullanıma göre',dag(r,x=>x.kullanim))}${bars('Türe göre',dag(r,x=>x.tur))}${bars('112 araçları: model yılı',dag(k.filter(x=>x.model_yili),x=>kova(x.model_yili)).sort((a,b)=>a[0].localeCompare(b[0])).map(([a,b])=>[a.slice(3),b]))}</div>`;
+   <div class="g2">${bars('Kullanıma göre',dag(r,x=>x.kullanim))}${bars('Türe göre',dag(r,x=>x.tur),'#1baf7a')}${bars('112 araçları: model yılı',dag(k.filter(x=>x.model_yili),x=>kova(x.model_yili)).sort((a,b)=>a[0].localeCompare(b[0])).map(([a,b])=>[a.slice(3),b]),'#4a3aa7')}</div>`;
   $('aracC').classList.remove('hide');
 }
 $('rf').onclick=()=>{bugunYukle();rapor()};
@@ -425,7 +449,8 @@ $('ef').addEventListener('submit',async e=>{
 
 // ---- Plan raporu ----
 const dag=(rows,fn)=>{const m={};rows.forEach(r=>[].concat(fn(r)).forEach(k=>m[k]=(m[k]||0)+1));return Object.entries(m).sort((a,b)=>b[1]-a[1])};
-const bars=(t,list)=>{const mx=Math.max(1,...list.map(x=>x[1]));return`<div class="card" style="padding:12px"><b>${t}</b>${list.map(([k,v])=>`<div class="bar"><span>${esc(k)}</span><i style="width:${v/mx*100}px;max-width:50%"></i><span>${v}</span></div>`).join('')||'<div class="emp">Veri yok</div>'}</div>`};
+const DURUM_RENK={'Planlandı':'#2a78d6','Gerçekleşti':'#008300','İptal':'#e34948'};
+const bars=(t,list,r='#2a78d6')=>{const mx=Math.max(1,...list.map(x=>x[1]));return`<div class="card grafik" style="padding:12px"><b>${t}</b>${list.map(([k,v])=>`<div class="bar"><span>${esc(k)}</span><i style="width:${v/mx*100}px;max-width:50%;background:${DURUM_RENK[k]||r}"></i><span>${v}</span></div>`).join('')||'<div class="emp">Veri yok</div>'}</div>`};
 async function rapor(){
   if(!me)return;
   const a=$('r1').value,z=$('r2').value;if(!a||!z){toast('Tarih aralığı seçin.');return}
@@ -435,7 +460,7 @@ async function rapor(){
   if(error){$('rap').innerHTML='<div class="emp">Rapor yüklenemedi.</div>';return}
   const rows=(data||[]).filter(ilgili);
   $('rap').innerHTML=`<p><b>${fmt(a)} – ${fmt(z)}</b> · toplam <b>${rows.length}</b> plan</p>
-   <div class="g2">${bars('Duruma göre',dag(rows,r=>r.durum))}${bars('Ajanda türüne göre',dag(rows,r=>TUR_AD[r.tur]||r.tur))}${bars('Birime göre',dag(rows.filter(r=>hbl(r).length),hbl))}</div>
+   <div class="g2">${bars('Duruma göre',dag(rows,r=>r.durum))}${bars('Ajanda türüne göre',dag(rows,r=>TUR_AD[r.tur]||r.tur),'#4a3aa7')}${bars('Birime göre',dag(rows.filter(r=>hbl(r).length),hbl),'#1baf7a')}</div>
    <div class="sc"><table><thead><tr><th>Tarih</th><th>Saat</th><th>Tür</th><th>Birim</th><th>Durum</th><th>Açıklama</th><th>Ekleyen</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${fmt(r.tarih)}</td><td>${esc(r.saat.slice(0,5))}</td><td>${esc(TUR_AD[r.tur]||r.tur)}</td><td>${esc(hbl(r).join(', '))}</td><td>${esc(r.durum)}</td><td>${esc(r.aciklama)}</td><td>${esc(r.ekleyen_p?.adsoyad||'')}</td></tr>`).join('')}</tbody></table></div>`;
 }
 $('rgo').onclick=rapor;$('rprint').onclick=()=>window.print();

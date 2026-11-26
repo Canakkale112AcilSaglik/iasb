@@ -48,16 +48,10 @@ textarea{resize:vertical;min-height:80px}
 .err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
 .cp{border-top:1px solid #f1f5f9;margin-top:18px;padding-top:12px;text-align:center;font-size:11px;color:#94a3b8}
 #app:not(.hide){display:flex;flex-direction:column;flex:1}
-header.top{background:var(--c);color:#fff;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
-.hi{max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
-header h1{font-size:22px;margin:0}
-header small{opacity:.85}
-.ub{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:8px 14px}
-nav{background:#fff;border-bottom:1px solid #e2e8f0}
-nav div{max-width:1400px;margin:0 auto;display:flex;gap:6px;padding:0 16px;overflow-x:auto}
-nav button{background:none;padding:12px 14px;font-weight:600;color:#64748b;border-bottom:3px solid transparent;white-space:nowrap}
-nav button:hover{color:#1e293b}
-nav button.on{color:var(--c);border-bottom-color:var(--c)}
+nav div{max-width:1400px;margin:0 auto;display:flex;gap:6px;padding:12px 16px 0;overflow-x:auto}
+nav button{background:#fff;border:1px solid #cbd5e1;border-radius:99px;padding:7px 14px;font-weight:600;font-size:12.5px;color:#334155;white-space:nowrap}
+nav button:hover{background:var(--l)}
+nav button.on{background:var(--c);color:#fff;border-color:var(--c)}
 .bg{font-size:11px;background:#f1f5f9;color:#475569;border-radius:99px;padding:1px 8px;margin-left:4px}
 nav button.on .bg{background:var(--l);color:var(--t)}
 main{max-width:1400px;width:100%;margin:0 auto;padding:16px;flex:1}
@@ -95,7 +89,6 @@ tbody td[data-d]:hover{background:var(--l)}
 .ev:hover .act,.ev:focus-within .act{opacity:1}
 @media(hover:none){.act{opacity:1}}
 .act button{background:none;padding:1px 3px;font-size:11px}
-footer{text-align:center;padding:14px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;background:#fff}
 dialog{border:0;border-radius:16px;padding:22px;width:min(440px,94vw);box-shadow:0 25px 50px rgba(15,23,42,.35)}
 dialog::backdrop{background:rgba(15,23,42,.7)}
 dialog h2{font-size:16px;margin:0 0 4px}
@@ -122,7 +115,6 @@ td.col{height:auto;min-height:320px;padding:8px}
 .pi.gec .pt span{color:#9f1d2c}
 .ps{font-size:11px;color:#64748b}
 .pi p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
-#clk{font-size:12px;font-variant-numeric:tabular-nums;padding-right:10px;border-right:1px solid rgba(255,255,255,.35)}
 .atab{display:flex;gap:6px;border-bottom:1px solid #e2e8f0;margin:12px 0}
 .atab button{background:none;padding:9px 14px;font-weight:600;color:#64748b;border-bottom:3px solid transparent}
 .atab button.on{color:var(--c);border-bottom-color:var(--c)}
@@ -197,14 +189,8 @@ body{background:#fff;display:block;min-height:0}
 </div>
 
 <div id="app" class="hide">
-  <header class="top"><div class="hi">
-    <div><h1><svg class="amb" viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg>Çanakkale İASB Kurumsal Ajanda</h1><small>Çanakkale İASB</small></div>
-    <div class="ub"><span id="clk"></span><b id="who" style="font-size:12px"></b>
-      <a class="b bl" href="index.html" style="text-decoration:none;border:1px solid rgba(255,255,255,.55)">🏠 Ana sayfa</a>
-      
-      
-      <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
-  </div></header>
+<div id="ortak-ust" data-sayfa="ajanda"></div>
+<script src="ortak.js"></script>
   <nav><div id="tabs" role="tablist"></div></nav>
   <main>
     <div class="tb">
@@ -222,7 +208,7 @@ body{background:#fff;display:block;min-height:0}
     </div>
     <div class="cal"><div class="sc"><table id="tbl"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div></div>
   </main>
-  <footer>Çanakkale İASB © 2026 • Agonya V2</footer>
+  <footer class="ort-alt" data-ort-alt></footer>
 </div>
 
 <dialog id="dlg">
@@ -307,7 +293,7 @@ const db=supabase.createClient(SB_URL,SB_KEY);
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let me=null,tab='bashekim',rows=[],users=[];
-let bugun=[],tickH=null,yenH=null,clkH=null;const alarm=new Set();
+let bugun=[],tickH=null,yenH=null;const alarm=new Set();
 
 const A='İIıÇçĞğÖöŞşÜü',B='iiiccggoossuu';
 const sade=s=>s.replace(/[İIıÇçĞğÖöŞşÜü]/g,c=>B[A.indexOf(c)]).toLowerCase();
@@ -333,7 +319,7 @@ const canEdit=e=>e.tur==='koordinasyon'?(me.rol==='skkm'||skkmYetkili()):ownMgr(
 const canDel=e=>e.tur==='koordinasyon'?skkmYetkili():ownMgr(e);
 
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hide');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add('hide'),4500)}
-function showLogin(msg){me=null;clearInterval(tickH);clearInterval(yenH);clearInterval(clkH);document.body.dataset.th='navy';$('app').classList.add('hide');$('login').classList.remove('hide');
+function showLogin(msg){me=null;clearInterval(tickH);clearInterval(yenH);document.body.dataset.th='navy';$('app').classList.add('hide');$('login').classList.remove('hide');
   $('lerr').textContent=msg||'';$('lerr').classList.toggle('hide',!msg);$('pw').value='';loadLoginList()}
 
 const dkKalan=e=>{const[y,m,d]=e.tarih.split('-').map(Number),[h,mi]=e.saat.split(':').map(Number);return Math.round((new Date(y,m-1,d,h,mi)-new Date())/60000)};
@@ -359,7 +345,6 @@ function tick(){
   bugun.forEach(e=>{const dk=dkKalan(e),k=e.id+'|'+e.saat;
     if(dk>0&&dk<=10&&!alarm.has(k)){alarm.add(k);popup('⏰ Plan zamanı yaklaşıyor',pItem(e))}});
 }
-const saatYaz=()=>{const n=new Date();$('clk').textContent=n.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',weekday:'long'})+' · '+n.toLocaleTimeString('tr-TR')};
 async function enter(){
   const{data:{user}}=await db.auth.getUser();
   if(!user)return showLogin();
@@ -369,12 +354,11 @@ async function enter(){
   
   
   $('login').classList.add('hide');$('app').classList.remove('hide');
-  $('who').textContent='👤 '+p.adsoyad+' ('+(p.rol==='admin'?'Yönetici':p.rol==='baskekim'?'Başhekim':p.birimler.join(', '))+')';
+  ortakKullanici(p);
   {const t=new URLSearchParams(location.search).get('tarih');if(t&&/^\d{4}-\d{2}-\d{2}$/.test(t))$('cur').value=t}if(!$('cur').value)$('cur').value=iso(new Date());
   drawTabs();load();
   const zorunlu=!p.sifre_degisti&&!ortakMi(p);
   if(zorunlu){location.href='index.html';return}
-  clearInterval(clkH);saatYaz();clkH=setInterval(saatYaz,1000);
   clearInterval(tickH);clearInterval(yenH);
   tickH=setInterval(tick,30000);yenH=setInterval(()=>bugunYukle(false),120000);
   bugunYukle(!zorunlu);

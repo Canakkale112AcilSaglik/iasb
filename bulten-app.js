@@ -185,7 +185,13 @@ async function init() {
     if (!me.admin && !me.units.length) return gate('Bu kullanıcının biriminin bültende slaytı yok. Şablondaki slayt başlığı, birim adıyla (örn. Personel Birimi) aynı olmalı.', false);
     user = { role: me.admin ? 'admin' : 'unit', units: me.units, name: me.adsoyad };
   }
-  $('#who').textContent = DEMO ? 'DEMO modu (veri bu tarayıcıda)' : (user.name + (user.role === 'admin' ? ' · Admin' : ''));
+  // Ad soyad ve birim diğer sayfalarla aynı biçimde yazılır; profil okunamazsa bülten bilgisi kullanılır.
+  if (DEMO) $('#who').textContent = 'DEMO modu (veri bu tarayıcıda)';
+  else {
+    const uid = getSess()?.user?.id;
+    const p = uid ? (await api('/rest/v1/profiles?select=*&id=eq.' + encodeURIComponent(uid)).catch(() => []))[0] : null;
+    ortakKullanici(p || { adsoyad: user.name, rol: user.role === 'admin' ? 'admin' : '', birimler: user.units });
+  }
   const cfg = ((await getRows('_config').catch(() => ({})))._meta || {}).data || {};
   $('#week').value = cfg.week || isoWeek(); $('#range').value = cfg.range || '';
   const saveCfg = () => putRow('_meta', { week: $('#week').value.trim(), range: $('#range').value }, 'draft', '_config');
@@ -197,7 +203,6 @@ async function init() {
   $('#export').style.display = user.role === 'admin' ? '' : 'none'; $('#export').onclick = exportPptx;
   $('#roll').style.display = user.role === 'admin' ? '' : 'none'; $('#roll').onclick = rollWeek;
   $('#out').onclick = () => { if (!DEMO) localStorage.removeItem(SKEY); location.reload(); };
-  if (CFG.AJANDA) $('header').prepend(el('a', { href: CFG.AJANDA, textContent: '← Ajanda', style: 'color:#fff;margin-right:8px' }));
   await load();
 }
 if (typeof document !== 'undefined') init();

@@ -88,21 +88,14 @@ dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#47
 td button{padding:2px 8px;border-radius:8px;background:#f1f5f9;color:#334155}
 .panel{margin-bottom:14px}
 .row select{min-width:130px}
+#app{display:flex;flex-direction:column;min-height:100vh}
+main{max-width:1400px;width:100%;flex:1}
 </style>
 </head>
 <body>
 <div id="app" class="hide">
- <header class="top"><div class="hi">
-  <h1>🚑 Çanakkale 112 İASB</h1>
-  <div class="ub"><b id="who" style="font-size:12px"></b>
-   <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
- </div></header>
- <nav><div>
-  <a href="index.html">🏠 Ana Sayfa</a>
-  <a href="ajanda.html">🗓️ Ajanda</a>
-  <a href="bulten.html">📰 Bülten</a>
-  <a href="genel-bilgiler.html" class="on">ℹ️ Genel Bilgiler</a>
- </div></nav>
+<div id="ortak-ust" data-sayfa="genel"></div>
+<script src="ortak.js"></script>
  <main>
   <div class="atab noprint" id="stab">
    <button type="button" data-s="ist" class="on">📍 İstasyonlar ve telsiz kodları</button>
@@ -116,6 +109,7 @@ td button{padding:2px 8px;border-radius:8px;background:#f1f5f9;color:#334155}
    <div class="card panel" id="p_arac"></div>
   </section>
  </main>
+ <footer class="ort-alt" data-ort-alt></footer>
 </div>
 
 <dialog id="gdlg">
@@ -238,7 +232,7 @@ $('out').onclick=async()=>{await db.auth.signOut();location.href='index.html'};
   if(!user){location.href='index.html';return}
   const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(!p||!p.aktif){location.href='index.html';return}
-  admin=p.rol==='admin';$('who').textContent='👤 '+p.adsoyad+(admin?' (Yönetici)':'');
+  admin=p.rol==='admin';ortakKullanici(p);
   $('app').classList.remove('hide');
   Object.keys(CFG).forEach(buildPanel);
   Object.keys(CFG).forEach(load);
