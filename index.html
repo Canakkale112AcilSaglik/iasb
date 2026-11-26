@@ -83,12 +83,19 @@ main{max-width:1400px;width:100%;flex:1}
 #bugunC{--r:#2a78d6}#istC{--r:#1baf7a}#aracC{--r:#eb6834}#raporC{--r:#4a3aa7}
 #aracC .kp .card{background:#fef1ea;border-color:#f6c9b3}
 .grafik{background:#f8fafc}
-.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:12px}
-.tip{border:1px solid var(--r);border-top-width:6px;border-radius:12px;padding:10px;text-align:center;background:#fff;background:color-mix(in srgb,var(--r) 12%,#fff)}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));grid-auto-rows:1fr;gap:10px}
+.tip{display:flex;flex-direction:column;justify-content:center;border:1px solid var(--r);border-top-width:6px;border-radius:12px;padding:10px;text-align:center;background:#fff;background:color-mix(in srgb,var(--r) 12%,#fff)}
 .tip span{display:block;font-weight:700;color:#334155}.tip b{display:block;font-size:30px;line-height:1.2;color:#0f172a}.tip small{color:#475569}
-.ilt th,.ilt td{text-align:center}.ilt th:first-child,.ilt td:first-child{text-align:left}
-.ilt i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
-@media print{#raporC{border-top:0}}
+.ikili{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:14px;margin-bottom:14px}
+.ikili:not(:has(>.card:not(.hide))){display:none}
+.ikili>.card{display:flex;flex-direction:column;min-width:0;margin-bottom:0!important}
+#istB{flex:1;display:flex;flex-direction:column}#istB .tips{flex:1}
+#istB .tips{grid-template-columns:repeat(2,1fr)}#istB .tip:last-child:nth-child(odd){grid-column:1/-1}#istB .tip b{font-size:44px}#istB .tip span{font-size:17px}
+#aracB .kp{grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin-bottom:10px}
+#aracB .kp .card{padding:10px 12px}#aracB .kp .card b{font-size:24px}
+#aracB .g2{grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:8px;margin-bottom:0}
+#aracB .bar span:first-child{width:105px}#aracB .bar i{max-width:35%}
+@media print{.ikili{display:none}#raporC{border-top:0}}
 /* giriş ekranı */
 #login{position:fixed;inset:0;z-index:50;display:flex;overflow:auto;padding:20px;background:radial-gradient(circle at 15% 20%,rgba(56,132,220,.45),transparent 45%),radial-gradient(circle at 85% 85%,rgba(225,29,72,.35),transparent 45%),linear-gradient(135deg,#0b1428,#1e2f4f 55%,#14213b)}
 #login::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px}
@@ -141,7 +148,7 @@ main{max-width:1400px;width:100%;flex:1}
 
 <div id="app" class="hide">
 <div id="ortak-ust" data-sayfa="index"></div>
-<script src="ortak.js?v=5"></script>
+<script src="ortak.js?v=6"></script>
  <main>
   <div class="kp ozet">
    <div class="card"><b id="k1">–</b><span>Bugün planlanan</span></div>
@@ -156,6 +163,7 @@ main{max-width:1400px;width:100%;flex:1}
    <div id="bl"></div>
   </div>
 
+  <div class="ikili">
   <div class="card hide" id="istC" style="margin-bottom:14px">
    <div class="tb"><h2>📍 İstasyon türleri <span class="chip" id="istN"></span></h2><a class="b g" href="genel-bilgiler.html">Ayrıntı →</a></div>
    <div id="istB"></div>
@@ -164,6 +172,7 @@ main{max-width:1400px;width:100%;flex:1}
   <div class="card hide" id="aracC" style="margin-bottom:14px">
    <div class="tb"><h2>🚑 Araç analizi</h2><a class="b g" href="genel-bilgiler.html">Ayrıntı →</a></div>
    <div id="aracB"></div>
+  </div>
   </div>
 
   <div class="card" id="raporC">
@@ -412,14 +421,13 @@ $('edel').onclick=async()=>{
 // ---- İstasyon türleri (gb_istasyonlar tablosundan) ----
 const RENK=['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834'];
 async function istAnaliz(){
-  const{data,error}=await db.from('gb_istasyonlar').select('ilce,istasyon,tip').limit(5000);
+  const{data,error}=await db.from('gb_istasyonlar').select('tip').limit(5000);
   if(error||!data||!data.length){$('istC').classList.add('hide');return}
   const tipi=x=>String(x.tip??'').trim().toLocaleUpperCase('tr-TR')||'Belirtilmemiş';
   const tur=dag(data,tipi).sort((a,b)=>(a[0]==='Belirtilmemiş')-(b[0]==='Belirtilmemiş')||a[0].localeCompare(b[0],'tr',{numeric:true}));
   const renk=i=>tur[i][0]==='Belirtilmemiş'?'#94a3b8':RENK[i]||'#94a3b8';
   $('istN').textContent=data.length+' istasyon';
-  $('istB').innerHTML=`<div class="tips">${tur.map(([k,v],i)=>`<div class="tip" style="--r:${renk(i)}"><span>${esc(k)}</span><b>${v}</b><small>%${Math.round(v/data.length*100)}</small></div>`).join('')}</div>
-   <div class="sc"><table class="ilt"><thead><tr><th>İlçe</th>${tur.map(([k],i)=>`<th><i style="background:${renk(i)}"></i>${esc(k)}</th>`).join('')}<th>Toplam</th></tr></thead><tbody>${dag(data,x=>x.ilce||'Belirtilmemiş').map(([il,n])=>`<tr><td>${esc(il)}</td>${tur.map(([k])=>`<td>${data.filter(x=>(x.ilce||'Belirtilmemiş')===il&&tipi(x)===k).length||'–'}</td>`).join('')}<td><b>${n}</b></td></tr>`).join('')}</tbody></table></div>`;
+  $('istB').innerHTML=`<div class="tips">${tur.map(([k,v],i)=>`<div class="tip" style="--r:${renk(i)}"><span>${esc(k)}</span><b>${v}</b><small>%${Math.round(v/data.length*100)}</small></div>`).join('')}</div>`;
   $('istC').classList.remove('hide');
 }
 
