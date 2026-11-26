@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="112 İASB">
-<title>Çanakkale İASB / Dashboard</title>
+<title>Çanakkale İASB</title>
 <meta name="theme-color" content="#1e2f4f">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
 <style>
@@ -29,10 +29,7 @@ label.ck{display:flex;gap:6px;align-items:center;text-transform:none;font-size:1
 input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
 .ck input{width:auto}textarea{min-height:80px;resize:vertical}
 .err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
-#login{position:fixed;inset:0;background:rgba(15,23,42,.72);display:grid;place-items:center;padding:16px;z-index:50}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
-#login .card{width:min(420px,100%);padding:28px}
-#login h1{font-size:19px;text-align:center;margin:0 0 12px}
 main{max-width:1200px;margin:0 auto;padding:16px}
 .kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
 .kp .card b{display:block;font-size:28px;color:var(--c)}.kp .card span{color:#64748b;font-size:12px}
@@ -77,8 +74,6 @@ dialog h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#47
 @media print{header,nav,.kp,.noprint,#bugunC,#istC,#aracC{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
 #app{display:flex;flex-direction:column;min-height:100vh}
 main{max-width:1400px;width:100%;flex:1}
-.gic{width:64px;height:64px;border-radius:16px;background:var(--l);display:grid;place-items:center;margin:0 auto 12px}
-.gic svg{width:46px;height:31px;fill:none;stroke:var(--c);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .ozet .card{--r:#2a78d6;--z:#e6f0fc;background:var(--z);border-color:var(--r);border-left-width:6px}
 .ozet .card:nth-child(2){--r:#008300;--z:#e5f4e5}
 .ozet .card:nth-child(3){--r:#e34948;--z:#fdeaea}
@@ -94,25 +89,59 @@ main{max-width:1400px;width:100%;flex:1}
 .ilt th,.ilt td{text-align:center}.ilt th:first-child,.ilt td:first-child{text-align:left}
 .ilt i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
 @media print{#raporC{border-top:0}}
+/* giriş ekranı */
+#login{position:fixed;inset:0;z-index:50;display:flex;overflow:auto;padding:20px;background:radial-gradient(circle at 15% 20%,rgba(56,132,220,.45),transparent 45%),radial-gradient(circle at 85% 85%,rgba(225,29,72,.35),transparent 45%),linear-gradient(135deg,#0b1428,#1e2f4f 55%,#14213b)}
+#login::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px}
+.gkart{position:relative;margin:auto;display:grid;grid-template-columns:1.1fr 1fr;width:min(900px,100%);border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18)}
+.gmarka{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:44px 32px;background:radial-gradient(circle at 50% 0,rgba(96,165,250,.35),transparent 60%),linear-gradient(160deg,#243a66,#14213b 70%,#0e1830)}
+.gic{width:128px;height:128px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#1e2f4f;box-shadow:0 0 0 10px rgba(255,255,255,.10),0 0 0 22px rgba(255,255,255,.05),0 18px 40px rgba(0,0,0,.4);margin-bottom:34px}
+.gic svg{width:82px;height:55px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gmarka h1{font-size:32px;line-height:1.15;margin:0;letter-spacing:.01em}
+.gmarka p{margin:8px 0 0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#bfd3f2}
+.nabiz{width:100%;max-width:320px;height:60px;margin:22px 0;fill:none;stroke:#fb7185;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(251,113,133,.8))}
+.nabiz path{stroke-dasharray:100;animation:nabiz 3.2s linear infinite}
+@keyframes nabiz{0%{stroke-dashoffset:100}60%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:-100}}
+.g112{display:flex;align-items:center;gap:12px;text-align:left}
+.g112 b{font-size:30px;background:#e11d48;border-radius:14px;padding:2px 14px;box-shadow:0 8px 20px rgba(225,29,72,.45)}
+.g112 span{font-size:12px;line-height:1.35;color:#dbe7fa;font-weight:600}
+#lf{display:flex;flex-direction:column;justify-content:center;padding:44px 40px}
+#lf h2{margin:0;font-size:26px;color:#14213b}
+#lf>p{margin:4px 0 12px;color:#64748b}
+#lf input,#lf select{padding:12px 14px;background:#f8fafc}
+#lf input:focus,#lf select:focus{outline:3px solid rgba(42,120,214,.35);border-color:#2a78d6;background:#fff}
+#lbtn{width:100%;margin-top:20px;padding:14px;font-size:14px;background:linear-gradient(135deg,#2c4a80,#14213b);box-shadow:0 10px 24px rgba(30,47,79,.38)}
+#lbtn:hover{filter:brightness(1.15)}
+#lf .ort-giris{margin-top:24px}
+@media(max-width:760px){.gkart{grid-template-columns:1fr;max-width:440px}.gmarka{padding:28px 20px}.gic{width:88px;height:88px;margin-bottom:22px}.gic svg{width:58px;height:39px}.gmarka h1{font-size:25px}.gmarka p{font-size:11px}.nabiz{height:40px;margin:12px 0}#lf{padding:28px 24px}}
+@media(prefers-reduced-motion:reduce){.nabiz path{animation:none}}
 </style>
 </head>
 <body>
 <div id="login" class="hide">
- <form class="card" id="lf">
+ <div class="gkart">
+  <div class="gmarka">
    <div class="gic"><svg class="amb" viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg></div>
-   <h1>Çanakkale İASB / Dashboard</h1>
-  <label for="lu">Kullanıcı seçin</label><select id="lu"></select>
-  <div id="mw" class="hide"><label for="ad">Ad soyad</label><input id="ad"></div>
-  <label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password" required>
-  <div class="err hide" id="lerr"></div>
-  <button class="b" id="lbtn" style="width:100%;margin-top:16px;padding:11px">🔓 Giriş yap</button>
-  <div class="ort-giris" data-ort-alt></div>
- </form>
+   <h1>Çanakkale İASB</h1>
+   <p>İl Ambulans Servisi Başhekimliği</p>
+   <svg class="nabiz" viewBox="0 0 320 60" aria-hidden="true"><path pathLength="100" d="M0 32H86l10-8 10 8h18l8 10 12-38 13 50 10-22h22l12-12 13 12h106"/></svg>
+   <div class="g112"><b>112</b><span>Acil Sağlık<br>Hizmetleri</span></div>
+  </div>
+  <form id="lf">
+   <h2>Hoş geldiniz</h2>
+   <p>Adınızı seçin ve şifrenizi girin.</p>
+   <label for="lu">Kullanıcı seçin</label><select id="lu"></select>
+   <div id="mw" class="hide"><label for="ad">Ad soyad</label><input id="ad"></div>
+   <label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password" required placeholder="Şifrenizi giriniz">
+   <div class="err hide" id="lerr" role="alert"></div>
+   <button class="b" id="lbtn">🔓 Giriş yap</button>
+   <div class="ort-giris" data-ort-alt></div>
+  </form>
+ </div>
 </div>
 
 <div id="app" class="hide">
 <div id="ortak-ust" data-sayfa="index"></div>
-<script src="ortak.js?v=4"></script>
+<script src="ortak.js?v=5"></script>
  <main>
   <div class="kp ozet">
    <div class="card"><b id="k1">–</b><span>Bugün planlanan</span></div>
@@ -265,7 +294,7 @@ const canWrite=t=>t==='bashekim'?isMgr():t==='birim'?(isMgr()||myB().some(b=>MES
 const birimSecenek=t=>t==='nobet'?[...(skkmYetkili()?['SKKM']:[]),...(isMgr()?NOBET:myB().filter(b=>NOBET.includes(b)))]:(isMgr()?MESAI:myB().filter(b=>MESAI.includes(b)));
 
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hide');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add('hide'),4000)}
-function showLogin(msg){me=null;clearInterval(yenH);$('app').classList.add('hide');$('login').classList.remove('hide');
+function showLogin(msg){me=null;document.title='Çanakkale İASB';clearInterval(yenH);$('app').classList.add('hide');$('login').classList.remove('hide');
   $('lerr').textContent=msg||'';$('lerr').classList.toggle('hide',!msg);$('pw').value='';loadLoginList()}
 async function loadLoginList(){
   const{data,error}=await db.rpc('giris_listesi');
@@ -290,7 +319,7 @@ async function enter(){
   if(!user)return showLogin();
   const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(!p||!p.aktif||!tabsOf(p)){await db.auth.signOut();return showLogin('Hesap pasif veya yetkisiz.')}
-  me=p;
+  me=p;document.title='Çanakkale İASB / Dashboard';
   $('login').classList.add('hide');$('app').classList.remove('hide');
   ortakKullanici(p);
   $('new').classList.toggle('hide',!tabsOf(p).some(canWrite)||p.rol==='skkm');
