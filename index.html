@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src https://adylgqlzumwnzgehqjwf.supabase.co; img-src 'self' data:; base-uri 'none'">
+<title>Çanakkale 112 İASB</title>
+<meta name="theme-color" content="#1e2f4f">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
+<style>
+:root{--c:#1e2f4f;--d:#14213b;--l:#e8edf5}
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;color:#1e293b;font:14px/1.45 "Segoe UI",Tahoma,Geneva,Verdana,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0}
+.hide{display:none!important}
+.b{background:var(--c);color:#fff;border-radius:12px;padding:8px 14px;font-weight:600;font-size:12px;text-decoration:none;display:inline-block}
+.b:hover{background:var(--d)}.b.g{background:#f1f5f9;color:#334155}.b.g:hover{background:#e2e8f0}
+.b.bl{background:rgba(0,0,0,.2)}.b.em{background:#3b6b4c}.b:disabled{opacity:.6}
+label{display:block;font-size:11px;font-weight:700;color:#64748b;margin:10px 0 4px;text-transform:uppercase}
+label.ck{display:flex;gap:6px;align-items:center;text-transform:none;font-size:12px;font-weight:500;color:#334155;margin:3px 0}
+input,select,textarea{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
+.ck input{width:auto}textarea{min-height:80px;resize:vertical}
+.err{color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:8px;font-size:12px;text-align:center;margin-top:12px}
+#login{position:fixed;inset:0;background:rgba(15,23,42,.72);display:grid;place-items:center;padding:16px;z-index:50}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
+#login .card{width:min(420px,100%);padding:28px}
+#login h1{font-size:19px;text-align:center;margin:0 0 12px}
+header.top{background:var(--c);color:#fff;padding:14px 16px}
+.hi{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+header h1{font-size:21px;margin:0}
+.ub{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:8px 14px}
+nav{background:#fff;border-bottom:1px solid #e2e8f0}
+nav div{max-width:1200px;margin:0 auto;display:flex;gap:6px;padding:0 16px;overflow-x:auto}
+nav a{padding:12px 16px;font-weight:600;color:#64748b;border-bottom:3px solid transparent;white-space:nowrap;text-decoration:none}
+nav a:hover{color:#1e293b}nav a.on{color:var(--c);border-bottom-color:var(--c)}
+main{max-width:1200px;margin:0 auto;padding:16px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.kp .card b{display:block;font-size:28px;color:var(--c)}.kp .card span{color:#64748b;font-size:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:140px}
+.tb{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:10px}
+.tb h2{font-size:16px;margin:0}
+.pl{display:block;text-decoration:none;color:inherit;border:1px solid #cbd5e1;background:#f8fafc;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pl:hover{background:var(--l);border-color:var(--c)}
+.pl.ok{background:#eef6f0;border-color:#b7d7c3}.pl.ip{background:#fbeff0;border-color:#efc3c9}
+.pl .r1{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.pl .m{font-size:12px;color:#64748b}.pl p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.chip{font-size:11px;border-radius:99px;padding:1px 9px;background:#e2e8f0;color:#334155;font-weight:600}
+.emp{color:#94a3b8;text-align:center;padding:16px}
+.bar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.bar i{display:block;height:12px;background:var(--c);border-radius:6px;min-width:2px}
+.bar span:first-child{width:170px;flex:none}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border:1px solid #e2e8f0;padding:5px 8px;text-align:left;vertical-align:top}th{background:#f8fafc}
+.sc{overflow:auto;max-height:420px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+dialog{border:0;border-radius:16px;padding:22px;width:min(480px,94vw);box-shadow:0 20px 40px rgba(15,23,42,.35)}
+dialog::backdrop{background:rgba(15,23,42,.6)}
+dialog h2{margin:0 0 6px;font-size:17px}
+.btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;z-index:99}
+@media print{header,nav,.kp,.noprint,#bugunC{display:none!important}body{background:#fff}.sc{max-height:none;overflow:visible}}
+</style>
+</head>
+<body>
+<div id="login" class="hide">
+ <form class="card" id="lf">
+  <h1>Çanakkale 112 İASB</h1>
+  <label for="lu">Kullanıcı seçin</label><select id="lu"></select>
+  <div id="mw" class="hide"><label for="ad">Ad soyad</label><input id="ad"></div>
+  <label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password" required>
+  <div class="err hide" id="lerr"></div>
+  <button class="b" id="lbtn" style="width:100%;margin-top:16px;padding:11px">🔓 Giriş yap</button>
+ </form>
+</div>
+
+<div id="app" class="hide">
+ <header class="top"><div class="hi">
+  <h1>🚑 Çanakkale 112 İASB</h1>
+  <div class="ub"><span id="clk"></span><b id="who" style="font-size:12px"></b>
+   <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
+ </div></header>
+ <nav><div>
+  <a href="index.html" class="on">🏠 Ana Sayfa</a>
+  <a href="ajanda.html">🗓️ Ajanda</a>
+  <a href="bulten.html">📰 Bülten</a>
+  <a href="genel-bilgiler.html">ℹ️ Genel Bilgiler</a>
+ </div></nav>
+ <main>
+  <div class="kp">
+   <div class="card"><b id="k1">–</b><span>Bugün planlanan</span></div>
+   <div class="card"><b id="k2">–</b><span>Bugün gerçekleşen</span></div>
+   <div class="card"><b id="k3">–</b><span>Bugün iptal</span></div>
+   <div class="card"><b id="k4">–</b><span>Bu hafta toplam plan</span></div>
+  </div>
+
+  <div class="card" id="bugunC" style="margin-bottom:14px">
+   <div class="tb"><h2>📅 Bugünün planları</h2>
+    <div><button class="b em" id="new">➕ Plan ekle</button> <button class="b g" id="rf">🔄</button></div></div>
+   <div id="bl"></div>
+  </div>
+
+  <div class="card">
+   <div class="tb noprint"><h2>📊 Plan raporu</h2>
+    <button class="b g" id="rprint">🖨️ Yazdır / PDF</button></div>
+   <div class="row noprint">
+    <div><label for="r1">Başlangıç</label><input type="date" id="r1"></div>
+    <div><label for="r2">Bitiş</label><input type="date" id="r2"></div>
+    <div><label for="rt">Ajanda türü</label><select id="rt"></select></div>
+    <div style="flex:none;align-self:flex-end"><button class="b" id="rgo">Raporu getir</button></div>
+   </div>
+   <div id="rap" style="margin-top:14px"></div>
+  </div>
+ </main>
+</div>
+
+<dialog id="dlg">
+ <form id="ef">
+  <h2>🗓️ Plan ekle</h2>
+  <label for="et">Ajanda türü</label><select id="et"></select>
+  <div id="bw" class="hide"><label>Birim(ler)</label><div id="eb"></div></div>
+  <div class="row">
+   <div><label for="ed">Tarih</label><input type="date" id="ed" required></div>
+   <div><label for="es">Saat</label><input type="time" id="es" step="900" required></div>
+  </div>
+  <label for="ea">Açıklama / not</label>
+  <textarea id="ea" maxlength="1000" required placeholder="Planlama detayı. Hasta veya kişisel veri yazmayın."></textarea>
+  <div class="btns"><button type="button" class="b g" id="ec">Vazgeç</button><button class="b" id="esv">💾 Kaydet</button></div>
+ </form>
+</dialog>
+<div id="toast" class="hide"></div>
+
+<script>
+const SB_URL='https://adylgqlzumwnzgehqjwf.supabase.co';
+const SB_KEY='sb_publishable_6FJPyl7rxOdLsjhqEWM4hA_6Ez9g2i4';
+const DOMAIN='ajanda.example.com';
+const BIRIMLER=['Bilgi Sistemleri Birimi','Personel Birimi','Kalite Birimi','Disiplin Birimi','Teknik Birim','Depo Birimi','Tıbbi Cihaz Birimi','Ayniyat Birimi','Ambulans Bakım Birimi','Arşiv Birimi','SKKM Birimi','SAKOM Birimi'];
+const NOBET=['SAKOM Birimi','Teknik Birim'];
+const MESAI=BIRIMLER.filter(b=>!NOBET.includes(b));
+const SKM='SKKM Birimi';
+const TUR_AD={bashekim:'Başhekim Planlama',birim:'Birim Planlama (Mesai)',nobet:'Birim Planlama (Nöbet)',kisisel:'Kişisel Planlama',koordinasyon:'SKKM'};
+const GENEL=['bashekim','birim','nobet','kisisel'];
+const TABLAR={admin:GENEL,baskekim:GENEL,skkm:['nobet']};
+const tabsOf=p=>{
+  if(p.rol!=='birim_kullanicisi')return TABLAR[p.rol];
+  const m=p.birimler.some(b=>MESAI.includes(b)),n=p.birimler.some(b=>NOBET.includes(b)||b===SKM);
+  return['bashekim',...(m||!n?['birim']:[]),...(n?['nobet']:[]),'kisisel'];
+};
+const db=supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const A='İIıÇçĞğÖöŞşÜü',B='iiiccggoossuu';
+const sade=s=>s.replace(/[İIıÇçĞğÖöŞşÜü]/g,c=>B[A.indexOf(c)]).toLowerCase();
+const kimlik=ad=>sade(ad.trim()).replace(/\s+/g,'.')+'@'+DOMAIN;
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const fmt=s=>s.split('-').reverse().join('.');
+const hbl=e=>e.tur==='koordinasyon'?['SKKM']:(e.hedef_birimler||[]);
+let me=null,clkH=null,yenH=null;
+
+const isMgr=()=>me&&['admin','baskekim'].includes(me.rol);
+const myB=()=>me.birimler.filter(b=>b!=='SKKM');
+const skkmYetkili=()=>me.rol==='admin'||(me.rol==='birim_kullanicisi'&&me.birimler.includes(SKM));
+const ilgili=e=>!['birim','nobet'].includes(e.tur)||e.ekleyen===me.id||isMgr()||(e.hedef_birimler||[]).some(b=>me.birimler.includes(b));
+// ajanda.html hangi sekmede açsın: SKKM kayıtları nöbet sekmesinde görünür
+const tabOf=t=>t==='koordinasyon'?'nobet':t;
+const canWrite=t=>t==='bashekim'?isMgr():t==='birim'?(isMgr()||myB().some(b=>MESAI.includes(b))):t==='nobet'?(isMgr()||skkmYetkili()||myB().some(b=>NOBET.includes(b))):true;
+const birimSecenek=t=>t==='nobet'?[...(skkmYetkili()?['SKKM']:[]),...(isMgr()?NOBET:myB().filter(b=>NOBET.includes(b)))]:(isMgr()?MESAI:myB().filter(b=>MESAI.includes(b)));
+
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hide');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add('hide'),4000)}
+function showLogin(msg){me=null;clearInterval(clkH);clearInterval(yenH);$('app').classList.add('hide');$('login').classList.remove('hide');
+  $('lerr').textContent=msg||'';$('lerr').classList.toggle('hide',!msg);$('pw').value='';loadLoginList()}
+async function loadLoginList(){
+  const{data,error}=await db.rpc('giris_listesi');
+  const n=(!error&&Array.isArray(data)?data:[]).filter(x=>x&&x.adsoyad);
+  $('lu').innerHTML='<option value="" disabled selected>Kullanıcı seçin...</option>'+n.map(x=>`<option value="${esc(x.adsoyad)}">${esc(x.adsoyad)}${x.birim?' ('+esc(x.birim)+')':''}</option>`).join('')+(n.length?'':'<option value="__elle">Liste yüklenemedi, adımı yazacağım</option>');
+  if(!n.length)$('lu').value='__elle';
+  $('lu').onchange();
+}
+$('lu').onchange=()=>{const m=$('lu').value==='__elle';$('mw').classList.toggle('hide',!m);if(m)$('ad').focus()};
+$('lf').addEventListener('submit',async e=>{
+  e.preventDefault();const b=$('lbtn');b.disabled=true;$('lerr').classList.add('hide');
+  const ad=$('lu').value==='__elle'?$('ad').value:$('lu').value;
+  if(!ad.trim()){b.disabled=false;$('lerr').textContent='Kullanıcı seçin veya adınızı yazın.';$('lerr').classList.remove('hide');return}
+  const{error}=await db.auth.signInWithPassword({email:kimlik(ad),password:$('pw').value});
+  b.disabled=false;
+  if(error){$('lerr').textContent='Ad soyad veya şifre hatalı.';$('lerr').classList.remove('hide');return}
+  await enter();
+});
+$('out').onclick=async()=>{await db.auth.signOut();showLogin()};
+const saatYaz=()=>{const n=new Date();$('clk').textContent=n.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',weekday:'long'})+' · '+n.toLocaleTimeString('tr-TR')};
+
+async function enter(){
+  const{data:{user}}=await db.auth.getUser();
+  if(!user)return showLogin();
+  const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(!p||!p.aktif||!tabsOf(p)){await db.auth.signOut();return showLogin('Hesap pasif veya yetkisiz.')}
+  me=p;
+  $('login').classList.add('hide');$('app').classList.remove('hide');
+  $('who').textContent='👤 '+p.adsoyad+' ('+(p.rol==='admin'?'Yönetici':p.rol==='baskekim'?'Başhekim':p.birimler.join(', '))+')';
+  $('new').classList.toggle('hide',!tabsOf(p).some(canWrite)||p.rol==='skkm');
+  const t=tabsOf(p);
+  $('rt').innerHTML='<option value="">Tümü</option>'+t.map(k=>`<option value="${k}">${TUR_AD[k]}</option>`).join('');
+  const bg=new Date(),pz=new Date(bg);pz.setDate(bg.getDate()-((bg.getDay()+6)%7));
+  if(!$('r1').value){$('r1').value=iso(pz);$('r2').value=iso(bg)}
+  clearInterval(clkH);saatYaz();clkH=setInterval(saatYaz,1000);
+  clearInterval(yenH);yenH=setInterval(bugunYukle,120000);
+  bugunYukle();rapor();
+}
+
+async function bugunYukle(){
+  if(!me)return;
+  const bg=new Date(),pz=new Date(bg);pz.setDate(bg.getDate()-((bg.getDay()+6)%7));const cm=new Date(pz);cm.setDate(pz.getDate()+6);
+  const[a,h]=await Promise.all([
+    db.from('ajanda_notlari').select('*').eq('tarih',iso(bg)).order('saat'),
+    db.from('ajanda_notlari').select('id,tur,hedef_birimler,ekleyen').gte('tarih',iso(pz)).lte('tarih',iso(cm))]);
+  if(a.error){$('bl').innerHTML='<div class="emp">Planlar yüklenemedi.</div>';return}
+  const rows=(a.data||[]).filter(ilgili),say=d=>rows.filter(r=>r.durum===d).length;
+  $('k1').textContent=say('Planlandı');$('k2').textContent=say('Gerçekleşti');$('k3').textContent=say('İptal');
+  $('k4').textContent=h.error?'–':(h.data||[]).filter(ilgili).length;
+  $('bl').innerHTML=rows.map(e=>`<a class="pl ${e.durum==='Gerçekleşti'?'ok':e.durum==='İptal'?'ip':''}" href="ajanda.html?tab=${tabOf(e.tur)}&tarih=${e.tarih}&id=${e.id}">
+   <div class="r1"><span>🕒 ${esc(e.saat.slice(0,5))} · ${esc(TUR_AD[e.tur]||e.tur)}</span><span class="chip">${esc(e.durum)}</span></div>
+   ${hbl(e).length?`<div class="m">${esc(hbl(e).join(', '))}</div>`:''}<p>${esc(e.aciklama)}</p></a>`).join('')||'<div class="emp">Bugün için plan yok.</div>';
+}
+$('rf').onclick=()=>{bugunYukle();rapor()};
+
+// ---- Plan ekle ----
+function birimKutu(){
+  const t=$('et').value,l=(t==='birim'||t==='nobet')?birimSecenek(t):[];
+  $('bw').classList.toggle('hide',!l.length);
+  $('eb').innerHTML=l.map(b=>`<label class="ck"><input type="checkbox" value="${esc(b)}"${l.length===1?' checked':''}> ${esc(b)}</label>`).join('');
+}
+$('et').onchange=birimKutu;
+$('new').onclick=()=>{
+  const t=tabsOf(me).filter(canWrite);
+  $('et').innerHTML=t.map(k=>`<option value="${k}">${TUR_AD[k]}</option>`).join('');
+  $('ef').reset();$('et').value=t.includes('bashekim')?'bashekim':t[0];
+  $('ed').value=iso(new Date());birimKutu();$('dlg').showModal();
+};
+$('ec').onclick=()=>$('dlg').close();
+$('ef').addEventListener('submit',async e=>{
+  e.preventDefault();const b=$('esv');b.disabled=true;
+  const tur=$('et').value;
+  const rec={tarih:$('ed').value,saat:$('es').value,durum:'Planlandı',aciklama:$('ea').value.trim(),modul:'genel',tur,ekleyen:me.id};
+  if(!rec.aciklama){b.disabled=false;return}
+  if(tur==='birim'||tur==='nobet'){
+    const hb=[...document.querySelectorAll('#eb input:checked')].map(i=>i.value);
+    if(!hb.length){b.disabled=false;toast('En az bir birim seçin.');return}
+    const diger=hb.filter(x=>x!=='SKKM'),kay=[];
+    if(tur==='nobet'&&hb.includes('SKKM'))kay.push({...rec,modul:'skkm',tur:'koordinasyon'});
+    if(diger.length||tur==='birim')kay.push({...rec,hedef_birimler:diger});
+    var r=await db.from('ajanda_notlari').insert(kay).select('id');
+  }else var r=await db.from('ajanda_notlari').insert(rec).select('id');
+  b.disabled=false;
+  if(r.error||!r.data||!r.data.length){toast('Kaydedilemedi. Yetkiniz olmayabilir veya bilgiler eksik.');return}
+  $('dlg').close();toast('Plan eklendi.');bugunYukle();rapor();
+});
+
+// ---- Plan raporu ----
+const dag=(rows,fn)=>{const m={};rows.forEach(r=>[].concat(fn(r)).forEach(k=>m[k]=(m[k]||0)+1));return Object.entries(m).sort((a,b)=>b[1]-a[1])};
+const bars=(t,list)=>{const mx=Math.max(1,...list.map(x=>x[1]));return`<div class="card" style="padding:12px"><b>${t}</b>${list.map(([k,v])=>`<div class="bar"><span>${esc(k)}</span><i style="width:${v/mx*100}px;max-width:50%"></i><span>${v}</span></div>`).join('')||'<div class="emp">Veri yok</div>'}</div>`};
+async function rapor(){
+  if(!me)return;
+  const a=$('r1').value,z=$('r2').value;if(!a||!z){toast('Tarih aralığı seçin.');return}
+  let q=db.from('ajanda_notlari').select('*,ekleyen_p:profiles!ekleyen(adsoyad)').gte('tarih',a).lte('tarih',z).order('tarih').order('saat').limit(2000);
+  if($('rt').value)q=q.eq('tur',$('rt').value);
+  const{data,error}=await q;
+  if(error){$('rap').innerHTML='<div class="emp">Rapor yüklenemedi.</div>';return}
+  const rows=(data||[]).filter(ilgili);
+  $('rap').innerHTML=`<p><b>${fmt(a)} – ${fmt(z)}</b> · toplam <b>${rows.length}</b> plan</p>
+   <div class="g2">${bars('Duruma göre',dag(rows,r=>r.durum))}${bars('Ajanda türüne göre',dag(rows,r=>TUR_AD[r.tur]||r.tur))}${bars('Birime göre',dag(rows.filter(r=>hbl(r).length),hbl))}</div>
+   <div class="sc"><table><thead><tr><th>Tarih</th><th>Saat</th><th>Tür</th><th>Birim</th><th>Durum</th><th>Açıklama</th><th>Ekleyen</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${fmt(r.tarih)}</td><td>${esc(r.saat.slice(0,5))}</td><td>${esc(TUR_AD[r.tur]||r.tur)}</td><td>${esc(hbl(r).join(', '))}</td><td>${esc(r.durum)}</td><td>${esc(r.aciklama)}</td><td>${esc(r.ekleyen_p?.adsoyad||'')}</td></tr>`).join('')}</tbody></table></div>`;
+}
+$('rgo').onclick=rapor;$('rprint').onclick=()=>window.print();
+
+enter();
+</script>
+</body>
+</html>
