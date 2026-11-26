@@ -373,7 +373,7 @@ async function aracAnaliz(){
   const ort=ys.length?yil-ys.reduce((a,b)=>a+b,0)/ys.length:0;
   const kova=y=>y<=2010?'1) 2010 ve öncesi':y<=2015?'2) 2011–2015':y<=2020?'3) 2016–2020':'4) 2021 ve sonrası';
   $('aracB').innerHTML=`<div class="kp"><div class="card"><b>${r.length}</b><span>Toplam araç</span></div><div class="card"><b>${k.length}</b><span>112 kullanımında</span></div>
-   <div class="card"><b>${r.filter(x=>x.kullanim==='VASIFSIZ').length}</b><span>Vasfını yitiren</span></div><div class="card"><b>${ys.length?ort.toFixed(1):'–'}</b><span>112 araçlarında ort. yaş</span></div></div>
+   <div class="card"><b>${r.filter(x=>x.kullanim==='UMKE').length}</b><span>UMKE araçları</span></div><div class="card"><b>${ys.length?ort.toFixed(1):'–'}</b><span>112 araçlarında ort. yaş</span></div></div>
    <div class="g2">${bars('Kullanıma göre',dag(r,x=>x.kullanim))}${bars('Türe göre',dag(r,x=>x.tur))}${bars('112 araçları: model yılı',dag(k.filter(x=>x.model_yili),x=>kova(x.model_yili)).sort((a,b)=>a[0].localeCompare(b[0])).map(([a,b])=>[a.slice(3),b]))}</div>`;
   $('aracC').classList.remove('hide');
 }

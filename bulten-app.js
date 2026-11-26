@@ -23,6 +23,12 @@ function defaults(unitName) {
   }
   return d;
 }
+// Yeni hafta: tablo hücreleri boş başlar; serbest metinler geçen haftadan devralınır
+function blankFor(n, pd) {
+  const d = { ...defaults(n) };
+  for (const k of Object.keys(d)) if (k.split('|')[1] !== 'x') d[k] = ''; else if (pd && pd[k] != null) d[k] = pd[k];
+  return d;
+}
 const prevValue = (si, ti, rs, r, c, pd) => {            // "Geçen Hafta" = geçen haftanın "Bu Hafta" değeri
   const k = kk(si, ti, r, c + 1); return pd && pd[k] != null ? pd[k] : rs[r][c].t;
 };
@@ -53,7 +59,9 @@ async function putRow(u, data, status, w = week) {
 }
 /* ---------- hafta ---------- */
 const isoWeek = (d = new Date()) => { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const n = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - n); const y = t.getUTCFullYear(); return `${y}-${String(Math.ceil(((t - Date.UTC(y, 0, 1)) / 864e5 + 1) / 7)).padStart(2, '0')}`; };
-const prevOf = w => { let [y, n] = w.split('-').map(Number); n--; if (n < 1) { y--; n = 52; } return `${y}-${String(n).padStart(2, '0')}`; };
+const monOf = w => { const [y, n] = w.split('-').map(Number), j = new Date(Date.UTC(y, 0, 4)), d = j.getUTCDay() || 7; j.setUTCDate(j.getUTCDate() - d + 1 + (n - 1) * 7); return j; };
+const shiftWeek = (w, k) => { const m = monOf(w); m.setUTCDate(m.getUTCDate() + 7 * k); return isoWeek(new Date(m.getUTCFullYear(), m.getUTCMonth(), m.getUTCDate())); };
+const prevOf = w => shiftWeek(w, -1), nextOf = w => shiftWeek(w, 1);
 
 /* ---------- arayüz ---------- */
 async function load() {
@@ -61,7 +69,7 @@ async function load() {
   const safe = async w => { try { return await getRows(w); } catch (e) { $('#err').textContent = 'Sunucu hatası: ' + String(e.message).slice(0, 300) + ' — supabase.sql çalıştırıldı mı?'; return {}; } };
   $('#err').textContent = ''; [rows, prevRows] = await Promise.all([safe(week), safe(prevWeek)]);
   cur = {}; const names = Object.keys(SCH.units);
-  names.forEach(n => { cur[n] = rows[n] ? rows[n].data : { ...defaults(n), ...(prevRows[n] ? prevRows[n].data : {}) }; });
+  names.forEach(n => { cur[n] = rows[n] ? rows[n].data : blankFor(n, prevRows[n]?.data); });
   const vis = user.role === 'admin' ? names : names.filter(n => (user.units || []).includes(n));
   const tabs = $('#tabs'); tabs.innerHTML = '';
   vis.forEach(n => tabs.append(el('button', { className: 'tab' + (n === unit ? ' on' : ''), textContent: n + (rows[n]?.status === 'approved' ? ' ✓' : ''), onclick: () => { unit = n; load2(); } })));
@@ -126,12 +134,34 @@ async function exportPptx() {
   for (const [p, f] of Object.entries(src.files)) if (!f.dir) zip.file(p, await f.async('uint8array'), { createFolders: false });   // klasör girdilerini atla
   for (const [u, sl] of Object.entries(SCH.units)) {
     if (rows[u]?.status !== 'approved') pend.push(u);
-    const d = rows[u]?.data || defaults(u), pd = prevRows[u]?.data;
+    const d = rows[u]?.data || blankFor(u, prevRows[u]?.data), pd = prevRows[u]?.data;
     for (const si of sl) { const f = `ppt/slides/slide${si}.xml`; zip.file(f, fillSlide(await zip.file(f).async('string'), si, d, pd), { createFolders: false }); }
   }
   if ($('#range').value) { const f = 'ppt/slides/slide1.xml'; zip.file(f, (await zip.file(f).async('string')).replace(/\d{1,2}-\d{1,2}\.\d{2}\.\d{4}/, $('#range').value), { createFolders: false }); }
   if (pend.length && !confirm('Onaylanmamış birimler var: ' + pend.join(', ') + '\nYine de oluşturulsun mu?')) return;
   const a = el('a', { href: URL.createObjectURL(await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })), download: `Haftalık_Bülten_${week}.pptx` }); a.click();
+}
+/* ---------- Haftayı kapat: onayla, geçmişi sil, yeni haftaya geç ---------- */
+async function purge(keep) {
+  keep = [...keep, '_config'];
+  if (DEMO) { const d = demoDB(); Object.keys(d).forEach(k => { if (!keep.includes(k.split('#')[0])) delete d[k]; }); localStorage.demo = JSON.stringify(d); return; }
+  await api('/rest/v1/bulten_kayit?week=not.in.(' + keep.map(w => '"' + w + '"').join(',') + ')', { method: 'DELETE' });
+}
+async function rollWeek() {
+  if (!/^\d{4}-\d{2}$/.test(week)) { toast('Hafta 2026-38 biçiminde olmalı'); return; }
+  const names = Object.keys(SCH.units), nxt = nextOf(week);
+  const draft = names.filter(u => rows[u] && rows[u].status !== 'approved'), empty = names.filter(u => !rows[u]);
+  const msg = `${week}. hafta onaylanıp kapatılacak, yeni hafta ${nxt} olacak.\n\n• Bu haftanın verileri "Geçen Hafta" olarak kalır, "Bu Hafta" tabloları boşalır.\n• ${prevWeek} ve öncesindeki tüm kayıtlar SİLİNİR.\n`
+    + (draft.length ? `\nOnaysız birimler de kilitlenecek: ${draft.join(', ')}\n` : '') + (empty.length ? `\nBu hafta hiç kayıt girmeyen birimler: ${empty.join(', ')}\n` : '')
+    + '\nSunuyu oluşturduysanız devam edin. Emin misiniz?';
+  if (!confirm(msg)) return;
+  try {
+    for (const u of draft) await putRow(u, rows[u].data, 'approved');
+    await purge([week, nxt]);
+    $('#week').value = nxt; $('#range').value = '';
+    await putRow('_meta', { week: nxt, range: '' }, 'draft', '_config');
+  } catch (e) { $('#err').textContent = 'Hafta geçişi tamamlanamadı: ' + String(e.message).slice(0, 300); return; }
+  await load(); toast('Yeni hafta: ' + nxt);
 }
 window.__t = { fillSlide, setSCH: s => SCH = s };   // test için
 
@@ -148,7 +178,7 @@ async function init() {
     if (!(await freshSession().catch(() => null))) return gate('', true);
     const me = await api('/rest/v1/rpc/bulten_me', { method: 'POST', body: '{}' }).catch(e => ({ err: String(e.message).slice(0, 200) }));
     if (!me || me.err) return gate(me ? 'Sunucu hatası: ' + me.err + ' — supabase_profil.sql çalıştırıldı mı?' : 'Bu kullanıcının aktif bir profili yok.', false);
-    if (!me.admin && !me.units.length) return gate('Bu kullanıcıya bültende tanımlı bir birim yok (bulten_eslesme tablosunu kontrol et).', false);
+    if (!me.admin && !me.units.length) return gate('Bu kullanıcının biriminin bültende slaytı yok. Şablondaki slayt başlığı, birim adıyla (örn. Personel Birimi) aynı olmalı.', false);
     user = { role: me.admin ? 'admin' : 'unit', units: me.units, name: me.adsoyad };
   }
   $('#who').textContent = DEMO ? 'DEMO modu (veri bu tarayıcıda)' : (user.name + (user.role === 'admin' ? ' · Admin' : ''));
@@ -161,6 +191,7 @@ async function init() {
   $('#approve').onclick = () => save(rows[unit]?.status === 'approved' ? 'draft' : 'approved');
   $('#range').onchange = async () => { if (user.role !== 'admin') return; await saveCfg(); toast('Tarih kaydedildi'); };
   $('#export').style.display = user.role === 'admin' ? '' : 'none'; $('#export').onclick = exportPptx;
+  $('#roll').style.display = user.role === 'admin' ? '' : 'none'; $('#roll').onclick = rollWeek;
   $('#out').onclick = () => { if (!DEMO) localStorage.removeItem(SKEY); location.reload(); };
   if (CFG.AJANDA) $('header').prepend(el('a', { href: CFG.AJANDA, textContent: '← Ajanda', style: 'color:#fff;margin-right:8px' }));
   await load();

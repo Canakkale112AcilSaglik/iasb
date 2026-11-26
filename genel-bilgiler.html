@@ -136,6 +136,7 @@ const CFG={
  tel:{table:'gb_telsiz',title:'Telsiz / ekip kodları',cols:[{k:'grup',t:'Grup',f:1,req:1},{k:'ad',t:'Ad',req:1},{k:'kod',t:'Kod'}]},
  arac:{table:'gb_araclar',title:'Ambulans ve araç listesi',cols:[{k:'plaka',t:'Plaka'},{k:'model_yili',t:'Model yılı',type:'number'},{k:'marka',t:'Marka',f:1},{k:'model',t:'Model'},{k:'gorev',t:'Görev',f:1},{k:'tur',t:'Tür',f:1},{k:'birim',t:'Birim'},{k:'kullanim',t:'Kullanım',f:1},{k:'aciklama',t:'Açıklama'}]}
 };
+const GRUP_SIRA=['İstasyon','Yönetim ve birimler','Özeller','Olağan Dışı Durum'];
 const D={ist:[],tel:[],arac:[]},ST={};let admin=false,ed=null;
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hide');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add('hide'),4500)}
 const cell=(x,r)=>x.type==='date'?fmt(r[x.k]):esc(r[x.k]);
@@ -184,7 +185,10 @@ function draw(key){
 async function load(key){
   const{data,error}=await db.from(CFG[key].table).select('*').order('id').limit(5000);
   if(error){$('t_'+key).innerHTML='<div class="emp">Liste alınamadı. genel_bilgiler_kurulum.sql çalıştırıldı mı?</div>';return}
-  D[key]=data||[];refill(key);draw(key);
+  D[key]=data||[];
+  if(key==='tel'){const gi=x=>{const i=GRUP_SIRA.indexOf(x.grup);return i<0?99:i};
+    D.tel.sort((a,b)=>gi(a)-gi(b)||String(a.grup).localeCompare(String(b.grup),'tr')||String(a.kod??'').localeCompare(String(b.kod??''),'tr',{numeric:true}))}
+  refill(key);draw(key);
 }
 $('stab').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;
   document.querySelectorAll('#stab button').forEach(x=>x.classList.toggle('on',x===b));

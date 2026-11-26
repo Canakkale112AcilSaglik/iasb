@@ -201,8 +201,8 @@ body{background:#fff;display:block;min-height:0}
     <div><h1><svg class="amb" viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg>Çanakkale İASB Kurumsal Ajanda</h1><small>Çanakkale İASB</small></div>
     <div class="ub"><span id="clk"></span><b id="who" style="font-size:12px"></b>
       <a class="b bl" href="index.html" style="text-decoration:none;border:1px solid rgba(255,255,255,.55)">🏠 Ana sayfa</a>
-      <a class="b am hide" id="adminbtn" href="index.html?yonetim=1" style="text-decoration:none">🛡️ Yönetim</a>
-      <button class="b bl" id="pwbtn">🔑 Şifre</button>
+      
+      
       <button class="b bl" id="out" style="border:1px solid rgba(255,255,255,.55)">⏻ Çıkış</button></div>
   </div></header>
   <nav><div id="tabs" role="tablist"></div></nav>
@@ -247,19 +247,6 @@ body{background:#fff;display:block;min-height:0}
     <label for="ea">Açıklama / not</label>
     <textarea id="ea" maxlength="1000" required placeholder="Planlama detayını yazınız. Hasta veya kişisel veri yazmayın."></textarea>
     <div class="btns"><button type="button" class="b g" id="ec">Vazgeç</button><button class="b" id="esv">💾 Kaydı kaydet</button></div>
-  </form>
-</dialog>
-
-<dialog id="pdlg">
-  <form id="pf">
-    <h2>🔑 Şifre değiştir</h2>
-    <p id="pnote" class="hide" style="color:#b45309;font-size:12px;margin:6px 0 0">İlk girişiniz. Devam etmek için kendi şifrenizi belirleyin.</p>
-    <label for="p1">Yeni şifre (en az 8 karakter)</label>
-    <input id="p1" type="password" minlength="8" autocomplete="new-password" required>
-    <label for="p2">Yeni şifre (tekrar)</label>
-    <input id="p2" type="password" minlength="8" autocomplete="new-password" required>
-    <div class="err hide" id="perr" role="alert"></div>
-    <div class="btns"><button type="button" class="b g" id="pc">İptal</button><button class="b">Kaydet</button></div>
   </form>
 </dialog>
 
@@ -379,14 +366,14 @@ async function enter(){
   const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(!p||!p.aktif||!tabsOf(p)){await db.auth.signOut();return showLogin('Hesap pasif veya yetkisiz. Yöneticiyle görüşün.')}
   me=p;{const q=new URLSearchParams(location.search).get('tab');tab=(q&&tabsOf(p).includes(q))?q:tabsOf(p)[0]}
-  $('pwbtn').classList.toggle('hide',ortakMi(p));
-  $('adminbtn').classList.toggle('hide',p.rol!=='admin');
+  
+  
   $('login').classList.add('hide');$('app').classList.remove('hide');
   $('who').textContent='👤 '+p.adsoyad+' ('+(p.rol==='admin'?'Yönetici':p.rol==='baskekim'?'Başhekim':p.birimler.join(', '))+')';
   {const t=new URLSearchParams(location.search).get('tarih');if(t&&/^\d{4}-\d{2}-\d{2}$/.test(t))$('cur').value=t}if(!$('cur').value)$('cur').value=iso(new Date());
   drawTabs();load();
   const zorunlu=!p.sifre_degisti&&!ortakMi(p);
-  if(zorunlu)openPw(true);
+  if(zorunlu){location.href='index.html';return}
   clearInterval(clkH);saatYaz();clkH=setInterval(saatYaz,1000);
   clearInterval(tickH);clearInterval(yenH);
   tickH=setInterval(tick,30000);yenH=setInterval(()=>bugunYukle(false),120000);
@@ -455,13 +442,6 @@ function openEdit(ev,date,time){
   gorevGoster();$('eg').checked=!!(ev&&ev.gorevlendirme);$('en').value=ev?.ekip_adi||'';$('ek').value=ev?.ekip_kodu||'';$('eg').onchange();
   $('dlg').showModal();
 }
-
-function openPw(forced){
-  $('pf').reset();$('perr').classList.add('hide');
-  $('pdlg').dataset.f=forced?'1':'';$('pc').classList.toggle('hide',!!forced);$('pnote').classList.toggle('hide',!forced);
-  $('pdlg').showModal();
-}
-$('pdlg').addEventListener('cancel',e=>{if($('pdlg').dataset.f)e.preventDefault()});
 
 async function loadLoginList(){
   const{data,error}=await db.rpc('giris_listesi');
@@ -554,19 +534,6 @@ function pdfHazirla(){
   window.print();
 }
 $('prt').onclick=pdfHazirla;
-
-$('pwbtn').onclick=()=>openPw(false);
-$('pc').onclick=()=>$('pdlg').close();
-$('pf').addEventListener('submit',async e=>{
-  e.preventDefault();const p1=$('p1').value,er=m=>{$('perr').textContent=m;$('perr').classList.remove('hide')};
-  if(p1!==$('p2').value)return er('Şifreler aynı değil.');
-  if(p1.length<8)return er('Şifre en az 8 karakter olmalı.');
-  if([ilkSifre(me.adsoyad),ilkSifre(me.adsoyad).slice(0,2)+'112'].includes(p1))return er('Başlangıç şifresini kullanamazsınız. Farklı bir şifre seçin.');
-  const{error}=await db.auth.updateUser({password:p1});
-  if(error)return er('Şifre değiştirilemedi. Farklı bir şifre deneyin.');
-  await db.rpc('ilk_sifre_tamam');me.sifre_degisti=true;
-  const ilk=$('pdlg').dataset.f;$('pdlg').dataset.f='';$('pdlg').close();toast('Şifreniz değiştirildi.');if(ilk)bugunYukle(true);
-});
 
 // ---- Kişisel notu birim ajandasına aktarma ----
 const ahd=()=>document.querySelector('input[name=ahd]:checked').value;
