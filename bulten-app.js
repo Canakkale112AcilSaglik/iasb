@@ -172,17 +172,18 @@ window.__t = { fillSlide, setSCH: s => SCH = s };   // test için
 /* ---------- başlat ---------- */
 async function init() {
   SCH = await (await fetch('bulten-schema.json')).json();
-  const gate = (msg, form) => { $('#login').style.display = ''; $('#app').style.display = 'none'; $('#le').textContent = msg || ''; $('#lf').style.display = form ? '' : 'none';
-    $('#lo').onclick = () => { localStorage.removeItem(SKEY); location.reload(); };
-    $('#lf').onsubmit = async e => { e.preventDefault(); let em = $('#em').value.trim(); if (!em.includes('@') && CFG.EMAIL_DOMAIN) em += '@' + CFG.EMAIL_DOMAIN;
-      const r = await fetch(CFG.URL + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: CFG.KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: em, password: $('#pw').value }) });
-      const s = await r.json(); if (!s.access_token) return void ($('#le').textContent = 'Giriş başarısız: kullanıcı adı/şifre hatalı'); localStorage[SKEY] = JSON.stringify(s); location.reload(); }; };
+  // Giriş yalnızca ana sayfadadır: çıkışta sunucudaki oturum da kapatılıp oraya gidilir.
+  const cikis = async () => {
+    const t = getSess()?.access_token;
+    if (t) await fetch(CFG.URL + '/auth/v1/logout', { method: 'POST', headers: { apikey: CFG.KEY, Authorization: 'Bearer ' + t } }).catch(() => {});
+    localStorage.removeItem(SKEY); location.replace('index.html');
+  };
+  const gate = msg => { $('#login').style.display = ''; $('#app').style.display = 'none'; $('#le').textContent = msg; $('#lo').onclick = cikis; };
   if (DEMO) user = { role: 'admin', units: Object.keys(SCH.units), name: 'Demo' };
   else {
-    if (!(await freshSession().catch(() => null))) return gate('', true);
+    if (!(await freshSession().catch(() => null))) return void location.replace('index.html');
     const me = await api('/rest/v1/rpc/bulten_me', { method: 'POST', body: '{}' }).catch(e => ({ err: String(e.message).slice(0, 200) }));
-    if (!me || me.err) return gate(me ? 'Sunucu hatası: ' + me.err + ' — supabase_profil.sql çalıştırıldı mı?' : 'Bu kullanıcının aktif bir profili yok.', false);
-    if (!me.admin && !me.units.length) return gate('Bu kullanıcının biriminin bültende slaytı yok. Şablondaki slayt başlığı, birim adıyla (örn. Personel Birimi) aynı olmalı.', false);
+    if (!me || me.err) return gate(me ? 'Sunucu hatası: ' + me.err + ' — supabase_profil.sql çalıştırıldı mı?' : 'Bu kullanıcının aktif bir profili yok.');
     user = { role: me.admin ? 'admin' : 'unit', units: me.units, name: me.adsoyad };
   }
   // Ad soyad ve birim diğer sayfalarla aynı biçimde yazılır; profil okunamazsa bülten bilgisi kullanılır.
@@ -191,6 +192,13 @@ async function init() {
     const uid = getSess()?.user?.id;
     const p = uid ? (await api('/rest/v1/profiles?select=*&id=eq.' + encodeURIComponent(uid)).catch(() => []))[0] : null;
     ortakKullanici(p || { adsoyad: user.name, rol: user.role === 'admin' ? 'admin' : '', birimler: user.units });
+  }
+  $('#out').onclick = DEMO ? () => location.reload() : cikis;
+  // Biriminin bültende slaytı olmayan kullanıcı: menü açık kalır, yalnızca uyarı gösterilir.
+  if (user.role !== 'admin' && !(user.units || []).some(n => SCH.units[n])) {
+    $('.bar').style.display = $('#tabs').style.display = 'none';
+    $('#form').replaceChildren(el('div', { className: 'card yok', textContent: 'Bülteniniz bulunmamaktadır.' }));
+    return;
   }
   const cfg = ((await getRows('_config').catch(() => ({})))._meta || {}).data || {};
   $('#week').value = cfg.week || isoWeek(); $('#range').value = cfg.range || '';
@@ -202,7 +210,6 @@ async function init() {
   $('#range').onchange = async () => { if (user.role !== 'admin') return; await saveCfg(); toast('Tarih kaydedildi'); };
   $('#export').style.display = user.role === 'admin' ? '' : 'none'; $('#export').onclick = exportPptx;
   $('#roll').style.display = user.role === 'admin' ? '' : 'none'; $('#roll').onclick = rollWeek;
-  $('#out').onclick = () => { if (!DEMO) localStorage.removeItem(SKEY); location.reload(); };
   await load();
 }
 if (typeof document !== 'undefined') init();

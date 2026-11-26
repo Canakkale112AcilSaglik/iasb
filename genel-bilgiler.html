@@ -226,7 +226,7 @@ $('gdel').onclick=async()=>{
   if(r.error||!r.data||!r.data.length){toast('Silinemedi.');return}
   $('gdlg').close();toast('Kayıt silindi.');load(ed.key);
 };
-$('out').onclick=async()=>{await db.auth.signOut();location.href='index.html'};
+$('out').onclick=async()=>{await db.auth.signOut();location.replace('index.html')};
 (async()=>{
   const{data:{user}}=await db.auth.getUser();
   if(!user){location.href='index.html';return}
