@@ -10,6 +10,7 @@ const kk = (s, t, r, c) => `${s}|${t}|${r}|${c}`, xk = (s, id) => `${s}|x|${id}`
 const hdrOf = rows => rows[0].map(c => /ge[çc]en hafta/i.test(c.t) ? 'prev' : /^bu hafta/i.test(c.t) ? 'cur' : '');
 function kind(si, ti, rs, r, c, cell) {
   const h = hdrOf(rs); if (cell.m || r === 0) return 'L'; if (h[c] === 'prev') return 'P';
+  if (cell.t === '' && cell.gs > 1) return 'L';                      // boş ayırıcı (birleşik) satır: girdi kutusu yok
   const f = FREE[si + ':' + ti]; if (f != null && r >= f) return 'E';
   if (c === 0) return cell.t === '' ? 'E' : 'L';
   return /^[\d.,%\s\-/:]*$/.test(cell.t) ? 'E' : 'L';
@@ -92,6 +93,7 @@ function render() {
       const tb = el('table'); const pd = prevRows[unit]?.data;
       rs.forEach((row, r) => { const tr = el('tr'); row.forEach((cell, c) => {
         if (cell.m) return; const k = kind(si, ti, rs, r, c, cell), td = el(r === 0 ? 'th' : 'td');
+        if (cell.gs > 1) td.colSpan = cell.gs; if (cell.rs > 1) td.rowSpan = cell.rs;   // birleşik hücreler sunudaki gibi gösterilir
         if (k === 'E') td.append(el('input', { value: d[kk(si, ti, r, c)] ?? '', disabled: locked, oninput: e => d[kk(si, ti, r, c)] = e.target.value }));
         else if (k === 'P') { td.textContent = prevValue(si, ti, rs, r, c, pd); td.className = 'prev'; }
         else { td.textContent = cell.t; td.className = 'lbl'; } tr.append(td); }); tb.append(tr); });
