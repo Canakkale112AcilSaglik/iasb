@@ -287,7 +287,8 @@ function showLogin(){me=null;clearInterval(tickH);clearInterval(yenH);$('app').c
 const dkKalan=e=>{const[y,m,d]=e.tarih.split('-').map(Number),[h,mi]=e.saat.split(':').map(Number);return Math.round((new Date(y,m-1,d,h,mi)-new Date())/60000)};
 const sureMetni=dk=>{const a=Math.abs(dk),t=(a>=60?Math.floor(a/60)+' sa '+(a%60?a%60+' dk':''):a+' dk').trim();return dk<0?`Geçti (${t} önce)`:dk===0?'Şimdi':`${t} kaldı`};
 const hbl=e=>e.tur==='koordinasyon'?['SKKM']:(e.hedef_birimler||[]);
-const ilgili=e=>!['birim','nobet'].includes(e.tur)||e.ekleyen===me.id||(e.hedef_birimler||[]).some(b=>me.birimler.includes(b));
+const ilgili=e=>e.tur==='bashekim'?me.rol==='baskekim'    // Başhekim ajandasındaki planların uyarısını (açılış listesi + zaman pop-up'ı) yalnızca Başhekim alır
+  :!['birim','nobet'].includes(e.tur)||e.ekleyen===me.id||(e.hedef_birimler||[]).some(b=>me.birimler.includes(b));
 const pItem=e=>{const dk=dkKalan(e);return`<div class="pi${dk<0?' gec':''}"><div class="pt"><b>🕒 ${esc(e.saat.slice(0,5))}</b><span>${sureMetni(dk)}</span></div><div class="ps">${esc(TABS[e.tur]?TABS[e.tur][0]:e.tur)}${hbl(e).length?' · '+esc(hbl(e).join(', ')):''}</div>${e.gorevlendirme?`<div class="ps"><b>Görevlendirme</b> · Ekip: ${esc(e.ekip_adi||'')} ${esc(e.ekip_kodu||'')}</div>`:''}<p>${esc(e.aciklama)}</p></div>`};
 function popup(b,html){const dl=$('bdlg');if(dl.open)$('bl').insertAdjacentHTML('beforeend',html);else{$('bt').textContent=b;$('bl').innerHTML=html;dl.showModal()}}
 $('bk').onclick=()=>$('bdlg').close();
