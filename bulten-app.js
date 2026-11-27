@@ -90,7 +90,7 @@ function render() {
   for (const si of SCH.units[unit]) {
     const s = SCH.slides[si], card = el('section', { className: 'card' }, el('h3', { textContent: `Slayt ${si} · ${s.title}` }));
     s.tables.forEach((rs, ti) => {
-      const tb = el('table', { className: 't' + rs[0].length }), hd = hdrOf(rs); const pd = prevRows[unit]?.data;
+      const tb = el('table', { className: 't' + rs[0].length + (FREE[si + ':' + ti] != null ? ' free' : '') }), hd = hdrOf(rs); const pd = prevRows[unit]?.data;
       rs.forEach((row, r) => { const tr = el('tr'); row.forEach((cell, c) => {
         if (cell.m) return; const k = kind(si, ti, rs, r, c, cell), td = el(r === 0 ? 'th' : 'td');
         if (cell.gs > 1) td.colSpan = cell.gs; if (cell.rs > 1) td.rowSpan = cell.rs;   // birleşik hücreler sunudaki gibi gösterilir
@@ -113,7 +113,7 @@ const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('
 function setCell(tc, v) {
   const doc = tc.ownerDocument, ps = [...tc.getElementsByTagNameNS(NS, 'p')]; ps.slice(1).forEach(x => x.remove());
   const p = ps[0], rs = [...p.getElementsByTagNameNS(NS, 'r')]; let r = rs[0];
-  if (!r) { r = doc.createElementNS(NS, 'a:r'); const rp = doc.createElementNS(NS, 'a:rPr'); rp.setAttribute('lang', 'tr-TR'); r.append(rp, doc.createElementNS(NS, 'a:t')); const end = p.getElementsByTagNameNS(NS, 'endParaRPr')[0]; end ? p.insertBefore(r, end) : p.append(r); }
+  if (!r) { r = doc.createElementNS(NS, 'a:r'); const rp = doc.createElementNS(NS, 'a:rPr'); rp.setAttribute('lang', 'tr-TR'); r.append(rp, doc.createElementNS(NS, 'a:t')); const end = p.getElementsByTagNameNS(NS, 'endParaRPr')[0]; if (end && end.getAttribute('sz')) rp.setAttribute('sz', end.getAttribute('sz')); end ? p.insertBefore(r, end) : p.append(r); }
   rs.slice(1).forEach(x => x.remove()); r.getElementsByTagNameNS(NS, 't')[0].textContent = v;
 }
 function setLines(sp, lines) {
