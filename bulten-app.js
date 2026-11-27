@@ -134,7 +134,7 @@ function fillSlide(xml, si, d, pd) {
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n' + new XMLSerializer().serializeToString(doc.documentElement);
 }
 async function exportPptx() {
-  const src = await JSZip.loadAsync(await (await fetch('bulten-template.pptx')).arrayBuffer()), zip = new JSZip(), pend = [];
+  const src = await JSZip.loadAsync(await (await fetch('bulten-template.pptx?t=' + Date.now(), { cache: 'no-store' })).arrayBuffer()), zip = new JSZip(), pend = [];
   for (const [p, f] of Object.entries(src.files)) if (!f.dir) zip.file(p, await f.async('uint8array'), { createFolders: false });   // klasör girdilerini atla
   for (const [u, sl] of Object.entries(SCH.units)) {
     if (rows[u]?.status !== 'approved') pend.push(u);
@@ -171,7 +171,7 @@ window.__t = { fillSlide, setSCH: s => SCH = s };   // test için
 
 /* ---------- başlat ---------- */
 async function init() {
-  SCH = await (await fetch('bulten-schema.json')).json();
+  SCH = await (await fetch('bulten-schema.json?t=' + Date.now(), { cache: 'no-store' })).json();
   // Giriş, çıkış ve ilk şifre yalnızca ana sayfadadır; burada sadece bilgi mesajı gösterilir.
   const goster = () => { $('#app').style.display = ''; };
   const bilgi = msg => { goster(); $('.bar').style.display = $('#tabs').style.display = 'none'; $('#form').replaceChildren(el('div', { className: 'card yok', textContent: msg })); };
