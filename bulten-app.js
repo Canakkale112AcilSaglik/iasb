@@ -77,10 +77,16 @@ async function load() {
   names.forEach(n => { cur[n] = rows[n] ? rows[n].data : blankFor(n, prevRows[n]?.data); });
   const vis = user.role === 'admin' ? names : names.filter(n => (user.units || []).includes(n));
   const tabs = $('#tabs'); tabs.innerHTML = '';
-  vis.forEach(n => tabs.append(el('button', { className: 'tab' + (n === unit ? ' on' : ''), textContent: n + (rows[n]?.status === 'approved' ? ' ✓' : ''), onclick: () => { unit = n; load2(); } })));
+  vis.forEach(n => tabs.append(el('button', { className: 'tab' + (n === unit ? ' on' : ''), textContent: n + (rows[n]?.status === 'approved' ? ' ✓' : rows[n] ? ' ●' : ''), onclick: () => { unit = n; load2(); } })));
   if (!vis.includes(unit)) unit = vis[0]; load2();
 }
-function load2() { [...$('#tabs').children].forEach(b => b.classList.toggle('on', b.textContent.replace(' ✓', '') === unit)); render(); }
+function load2() { [...$('#tabs').children].forEach(b => b.classList.toggle('on', b.textContent.replace(/ [✓●]$/, '') === unit)); render(); }
+const zamanTr = t => { const x = new Date(t); return isNaN(x) ? '' : x.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); };
+function girisBilgi(row, d) {      // küçük "kim · ne zaman" etiketi
+  if (!row) return el('small', { className: 'gi yok', textContent: 'Henüz giriş yapılmadı' });
+  const kim = d._by || '', ne = zamanTr(d._at || row.updated_at), ilk = d._cby && d._cby !== kim ? ` · ilk giriş: ${d._cby}` : '';
+  return el('small', { className: 'gi', title: 'Son kaydeden' + ilk, textContent: `👤 ${kim || '—'} · ${ne}` });
+}
 function render() {
   const box = $('#form'); box.innerHTML = ''; if (!unit) return;
   const st = rows[unit]?.status || 'draft', locked = st === 'approved', d = cur[unit];
@@ -88,7 +94,7 @@ function render() {
   $('#save').disabled = locked; $('#approve').style.display = user.role === 'admin' ? '' : 'none';
   $('#approve').textContent = locked ? 'Onayı kaldır' : 'Onayla ve kilitle';
   for (const si of SCH.units[unit]) {
-    const s = SCH.slides[si], card = el('section', { className: 'card' }, el('h3', { textContent: `Slayt ${si} · ${s.title}` }));
+    const s = SCH.slides[si], card = el('section', { className: 'card' }, el('h3', {}, `Slayt ${si} · ${s.title}`, girisBilgi(rows[unit], d)));
     s.tables.forEach((rs, ti) => {
       const tb = el('table', { className: 't' + rs[0].length + (FREE[si + ':' + ti] != null ? ' free' : '') }), hd = hdrOf(rs); const pd = prevRows[unit]?.data;
       rs.forEach((row, r) => { const tr = el('tr'); row.forEach((cell, c) => {
@@ -104,6 +110,7 @@ function render() {
   }
 }
 async function save(status) {
+  if (!status) { const m = cur[unit], now = new Date().toISOString(); m._by = user.name || ''; m._at = now; if (!m._cby) { m._cby = m._by; m._cat = now; } }   // kim, ne zaman girdi
   try { await putRow(unit, cur[unit], status || rows[unit]?.status || 'draft'); } catch (e) { $('#err').textContent = 'Kaydedilemedi: ' + String(e.message).slice(0, 300); return; }
   await load(); toast('Kaydedildi');
 }
