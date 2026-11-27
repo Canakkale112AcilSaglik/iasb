@@ -90,13 +90,13 @@ function render() {
   for (const si of SCH.units[unit]) {
     const s = SCH.slides[si], card = el('section', { className: 'card' }, el('h3', { textContent: `Slayt ${si} · ${s.title}` }));
     s.tables.forEach((rs, ti) => {
-      const tb = el('table'); const pd = prevRows[unit]?.data;
+      const tb = el('table', { className: 't' + rs[0].length }), hd = hdrOf(rs); const pd = prevRows[unit]?.data;
       rs.forEach((row, r) => { const tr = el('tr'); row.forEach((cell, c) => {
         if (cell.m) return; const k = kind(si, ti, rs, r, c, cell), td = el(r === 0 ? 'th' : 'td');
         if (cell.gs > 1) td.colSpan = cell.gs; if (cell.rs > 1) td.rowSpan = cell.rs;   // birleşik hücreler sunudaki gibi gösterilir
-        if (k === 'E') td.append(el('input', { value: d[kk(si, ti, r, c)] ?? '', disabled: locked, oninput: e => d[kk(si, ti, r, c)] = e.target.value }));
+        if (k === 'E') { td.className = 'in'; td.append(el('input', { value: d[kk(si, ti, r, c)] ?? '', disabled: locked, oninput: e => d[kk(si, ti, r, c)] = e.target.value })); }
         else if (k === 'P') { td.textContent = prevValue(si, ti, rs, r, c, pd); td.className = 'prev'; }
-        else { td.textContent = cell.t; td.className = 'lbl'; } tr.append(td); }); tb.append(tr); });
+        else { td.textContent = cell.t; td.className = 'lbl' + (r === 0 && hd[c] ? ' h' + hd[c] : ''); } tr.append(td); }); tb.append(tr); });
       card.append(el('div', { className: 'scroll' }, tb));
     });
     s.texts.forEach(t => card.append(el('textarea', { rows: Math.min(12, t.lines.length + 1), value: d[xk(si, t.id)] ?? '', disabled: locked, oninput: e => d[xk(si, t.id)] = e.target.value })));

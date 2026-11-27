@@ -107,6 +107,30 @@ textarea{background:#fff;color:#0f172a;font-size:13px;min-height:90px}
 main{max-width:1400px;width:100%;flex:1}
 #tabs{max-width:1400px;width:100%}
 .yok{text-align:center;padding:48px 16px;font-size:17px;font-weight:600;color:#475569}
+
+/* ---- Okunaklı ve hizalı giriş tabloları: Geçen Hafta (otomatik) / Bu Hafta (girilecek) ---- */
+#form table{table-layout:auto;width:100%;border-collapse:separate;border-spacing:0;border:1px solid #94a3b8;border-radius:10px;overflow:hidden;background:#fff}
+#form td,#form th{text-align:center;vertical-align:middle;padding:7px 10px;border:0;border-bottom:1px solid #d5deea;border-right:1px solid #d5deea}
+#form tr:last-child td{border-bottom:0}#form td:last-child,#form th:last-child{border-right:0}
+#form td.lbl:first-child{text-align:left;font-weight:600}
+#form table.t3 td:first-child,#form table.t3 th:first-child{width:52%}
+#form table.t3 td:not(:first-child),#form table.t3 th:not(:first-child){width:24%}
+#form table.t2 td:first-child,#form table.t2 th:first-child{width:72%}
+#form table.t2 td:last-child,#form table.t2 th:last-child{width:28%}
+/* Geçen Hafta: otomatik gelir, kilitli görünür */
+#form th.lbl.hprev{background:#475569;color:#fff}
+#form td.prev{background:#e2e8f0;color:#334155;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;border-right:2px solid #94a3b8}
+/* Bu Hafta / girilecek hücreler: yeşil vurgu, beyaz kutu */
+#form th.lbl.hcur{background:#2f6b45;color:#fff}
+#form td.in{background:#e6f4ea}
+#form td.in input{display:block;width:100%;min-width:64px;max-width:130px;margin:0 auto;background:#fff;color:#0f172a;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;text-align:center;border:2px solid #6aa883;border-radius:8px;padding:6px 6px}
+#form td.in input:hover{border-color:#2f6b45}
+#form td.in input:focus{border-color:#f59e0b;outline:3px solid rgba(245,158,11,.35)}
+#form td.in input:disabled{background:#f1f5f9;border-color:#cbd5e1;color:#475569}
+#form td.in:has(input:disabled){background:#f1f5f9}
+.lejant{display:flex;flex-wrap:wrap;gap:16px;font-size:12px;color:#334155;margin:0 0 12px}
+.lejant i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+@media(max-width:700px){#form td,#form th{padding:6px 5px}#form td.in input{min-width:52px}}
 </style></head><body>
 <div id="app" style="display:none"><div id="ortak-ust" data-sayfa="bulten"></div>
 <script src="ortak.js?v=6"></script>
@@ -116,7 +140,7 @@ main{max-width:1400px;width:100%;flex:1}
 <div class="donem"><label class="adm">Hafta <input id="week" placeholder="2026-38"></label>
 <label class="adm">Tarih aralığı <input id="range" placeholder="11-18.09.2026"></label>
 <span id="period"></span></div><button id="export" class="b em">📊 Sunuyu oluştur</button>
-<button id="roll" class="b ro" title="Haftayı onayla, geçmişi sil, yeni haftaya geç">🔄 Onayla ve geçmişi sil</button></div><div id="err" class="noprint" style="color:#be123c;margin-bottom:10px"></div><div id="form"></div></main><footer class="ort-alt" data-ort-alt></footer></div>
+<button id="roll" class="b ro" title="Haftayı onayla, geçmişi sil, yeni haftaya geç">🔄 Onayla ve geçmişi sil</button></div><div id="err" class="noprint" style="color:#be123c;margin-bottom:10px"></div><div class="lejant noprint"><span><i style="background:#94a3b8"></i>Geçen Hafta (otomatik gelir, değiştirilemez)</span><span><i style="background:#6aa883"></i>Bu Hafta (bilgileri buraya girin)</span></div><div id="form"></div></main><footer class="ort-alt" data-ort-alt></footer></div>
 <div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="bulten-config.js"></script><script src="bulten-app.js?v=6"></script></body></html>
+<script src="bulten-config.js"></script><script src="bulten-app.js?v=7"></script></body></html>
