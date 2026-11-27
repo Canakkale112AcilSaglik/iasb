@@ -25,7 +25,7 @@ function defaults(unitName) {
   return d;
 }
 // Yeni hafta: tablo hücreleri boş başlar; serbest metinler geçen haftadan devralınır
-const KEEP = { 2: 'all', 8: 'all', 10: [0], 11: [0], 12: [2] };   // yeni haftada silinmeyen tablolar: slayt -> tablo numaraları (Genel Bilgiler, Ambulans Bakım, Modüler Eğitim, ASTE, DÖF Takibi)
+const KEEP = { 2: 'all', 5: [1], 8: 'all', 10: [0], 11: [0], 12: [2] };   // yeni haftada silinmeyen tablolar: slayt -> tablo numaraları (Genel Bilgiler, Personel Aylık Rapor, Ambulans Bakım, Modüler Eğitim, ASTE, DÖF Takibi)
 function blankFor(n, pd) {
   const d = { ...defaults(n) };
   for (const k of Object.keys(d)) {
