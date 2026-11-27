@@ -5,7 +5,8 @@
     index:['index.html','🏠 Ana Sayfa','Dashboard'],
     ajanda:['ajanda.html','🗓️ Ajanda','Kurumsal Ajanda'],
     bulten:['bulten.html','📰 Bülten','Haftalık Bülten'],
-    genel:['genel-bilgiler.html','ℹ️ Genel Bilgiler','Genel Bilgiler']
+    genel:['genel-bilgiler.html','ℹ️ Genel Bilgiler','Genel Bilgiler'],
+    bildirim:['bildirim.html','🔔 Bildirim','Bildirim',1]   // 4. değer 1 = taslak: menüde yalnızca yöneticiye görünür (bitince 1'i silin)
   };
   const ALT='Çanakkale İASB © 2026 • Agonya V2.5';
   const AMB='<svg viewBox="0 0 48 32" aria-hidden="true"><path d="M3 25V8a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v17"/><path d="M29 12h7l7 7v6"/><path d="M3 25h5M17 25h12M39 25h4"/><path d="M3 15h26"/><path d="M13 6V3h6v3"/><circle cx="12.5" cy="26" r="3.5"/><circle cx="34.5" cy="26" r="3.5"/></svg>';
@@ -86,7 +87,7 @@ dialog::backdrop{background:rgba(11,20,40,.72);backdrop-filter:blur(4px)}
 ${dugme('adminbtn','yonetim','ort-am hide','🛡️ Yönetim')}
 ${dugme('pwbtn','sifre','','🔑 Şifre')}
 <button type="button" class="ort-b" id="out">⏻ Çıkış</button></div></div></div>
-<div class="ort-menu"><div class="ort-ic">${Object.entries(SAYFALAR).map(([k,s])=>`<a href="${s[0]}"${k===aktif?' class="on" aria-current="page"':''}>${s[1]}</a>`).join('')}</div></div>`;
+<div class="ort-menu"><div class="ort-ic">${Object.entries(SAYFALAR).map(([k,s])=>`<a href="${s[0]}"${k===aktif?' class="on" aria-current="page"':''}${s[3]?' data-taslak style="display:none"':''}>${s[1]}</a>`).join('')}</div></div>`;
 
   document.querySelectorAll('[data-ort-alt]').forEach(x=>x.textContent=ALT);
   document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('[data-ort-alt]').forEach(x=>x.textContent=ALT));
@@ -96,7 +97,7 @@ ${dugme('pwbtn','sifre','','🔑 Şifre')}
 
   // Yönetim yalnızca yöneticiye, Şifre ortak hesap dışındakilere görünür (asıl yetki kontrolü sunucudadır).
   const oku=()=>{try{return JSON.parse(localStorage.getItem('ort_kullanici'))}catch(e){return null}};
-  const yonetimGoster=()=>{const k=oku(),ben=!!(k&&$('who').textContent.includes(k.ad));$('adminbtn').classList.toggle('hide',!(ben&&k.admin));$('pwbtn').classList.toggle('hide',ben&&!!k.ortak)};
+  const yonetimGoster=()=>{const k=oku(),ben=!!(k&&$('who').textContent.includes(k.ad));$('adminbtn').classList.toggle('hide',!(ben&&k.admin));$('pwbtn').classList.toggle('hide',ben&&!!k.ortak);document.querySelectorAll('[data-taslak]').forEach(a=>a.style.display=(ben&&k.admin)?'':'none')};
   new MutationObserver(yonetimGoster).observe($('who'),{childList:true,characterData:true,subtree:true});
 
   // Çıkış her sayfada aynıdır: oturum kapatılır, ana sayfadaki giriş paneline gidilir.

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src https://adylgqlzumwnzgehqjwf.supabase.co; img-src 'self' data:; base-uri 'none'">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1e2f4f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="112 İASB">
+<title>Bildirim · Çanakkale 112 İASB</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
+<style>
+:root{--c:#1e2f4f;--d:#14213b;--l:#e8edf5;--mesai:#0f6b73;--nobet:#6b3b7d}
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;color:#1e293b;font:14px/1.45 "Segoe UI",Tahoma,Geneva,Verdana,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0}
+.hide{display:none!important}
+#app{display:flex;flex-direction:column;min-height:100vh}
+main{max-width:1400px;width:100%;margin:0 auto;padding:16px;flex:1}
+.b{background:var(--c);color:#fff;border-radius:12px;padding:8px 14px;font-weight:600;font-size:12px}
+.b:hover{filter:brightness(1.1)}.b:disabled{opacity:.55;cursor:not-allowed}
+.taslak{background:#fff7e0;border:1px solid #f3d27a;color:#7a5a00;border-radius:12px;padding:8px 14px;font-size:12px;font-weight:600;margin-bottom:12px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:#fff;border:1px solid #cbd5e1;color:#334155;border-radius:99px;padding:6px 14px;font-weight:600;font-size:12px;white-space:nowrap}
+.tab:hover{background:var(--l)}.tab.on{background:var(--c);color:#fff;border-color:var(--c)}
+.bar label{font-size:12px;font-weight:600;color:#334155;display:flex;align-items:center;gap:6px}
+.bar select{padding:6px 10px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;min-width:200px}
+.sp{flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:14px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;border-top:5px solid var(--c)}
+.card.mesai{border-top-color:var(--mesai)}.card.nobet{border-top-color:var(--nobet)}
+.card h3{margin:0 0 10px;font-size:15px;color:var(--c);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px}
+.chip{font-size:11px;font-weight:700;border-radius:99px;padding:2px 10px;color:#fff;background:var(--mesai)}
+.chip.nobet{background:var(--nobet)}
+.tabloyer{border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;color:#94a3b8;text-align:center;padding:26px 12px;font-size:12px;margin-bottom:10px}
+.card label{display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;margin:4px 0}
+textarea{width:100%;min-height:90px;resize:vertical;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
+textarea:focus,select:focus{outline:3px solid rgba(42,120,214,.3)}
+.yok{text-align:center;padding:48px 16px;font-size:16px;font-weight:600;color:#475569}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;z-index:99;opacity:0;transition:.2s}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="app" class="hide">
+<div id="ortak-ust" data-sayfa="bildirim"></div>
+<script src="ortak.js?v=6"></script>
+<main>
+  <div class="taslak noprint" id="taslak">🧪 ÖN TASLAK: tablolar henüz belirlenmedi, "Not" kutuları şimdilik kaydedilmiyor. Bu sayfa yalnızca yöneticiye görünür.</div>
+  <div class="bar" id="bar">
+    <div class="seg" id="seg"></div>
+    <label id="ubx">Birim <select id="usel"></select></label>
+    <span class="sp"></span>
+    <button class="b" id="save" disabled title="Tablolar belirlenip kayıt altyapısı bağlanınca açılacak">💾 Kaydet (yakında)</button>
+  </div>
+  <div id="liste" class="grid"></div>
+</main>
+<footer class="ort-alt" data-ort-alt></footer>
+</div>
+<div id="toast"></div>
+
+<script>
+const SB_URL='https://adylgqlzumwnzgehqjwf.supabase.co';
+const SB_KEY='sb_publishable_6FJPyl7rxOdLsjhqEWM4hA_6Ez9g2i4';
+const SADECE_YONETICI=true;   // Taslak bitince false yapın: sayfa herkese açılır (menüde de görünür)
+// Birim grupları (ajandadaki mantıkla aynı): nöbet birimleri SAKOM, Teknik ve SKKM; diğerleri mesai
+const BIRIMLER=['Bilgi Sistemleri Birimi','Personel Birimi','Kalite Birimi','Eğitim Birimi','Disiplin Birimi','Teknik Birim','Depo Birimi','Tıbbi Cihaz Birimi','Ayniyat Birimi','Ambulans Bakım Birimi','Arşiv Birimi','SKKM Birimi','SAKOM Birimi'];
+const NOBET=['SAKOM Birimi','Teknik Birim','SKKM Birimi'];
+const MESAI=BIRIMLER.filter(b=>!NOBET.includes(b));
+const db=supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let me=null,grup='tum',secili='';           // grup: tum | mesai | nobet
+const notlar={};                            // taslak: yalnızca bellekte tutulur
+const yonetici=()=>me&&['admin','baskekim'].includes(me.rol);
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
+
+// Kullanıcının görebileceği birimler: yönetici hepsini, diğerleri yalnızca kendi birimlerini
+function gorunenBirimler(){
+  if(yonetici())return BIRIMLER;
+  if(me.rol==='skkm')return['SKKM Birimi'];
+  const k=(me.birimler||[]).map(b=>b==='SKKM'?'SKKM Birimi':b);
+  return BIRIMLER.filter(b=>k.includes(b));
+}
+const tur=b=>NOBET.includes(b)?'nobet':'mesai';
+
+function ciz(){
+  const hepsi=gorunenBirimler();
+  let l=hepsi;
+  if(grup==='mesai')l=l.filter(b=>tur(b)==='mesai');
+  if(grup==='nobet')l=l.filter(b=>tur(b)==='nobet');
+  if(secili)l=l.filter(b=>b===secili);
+  $('liste').innerHTML=l.length?l.map(b=>`<section class="card ${tur(b)}" data-b="${esc(b)}">
+    <h3>${esc(b)}<span class="chip ${tur(b)}">${tur(b)==='nobet'?'Nöbet':'Mesai'}</span></h3>
+    <div class="tabloyer">Tablolar burada olacak (daha sonra belirlenecek)</div>
+    <label>Not:</label>
+    <textarea data-n="${esc(b)}" placeholder="Bu birim için notunuzu yazın">${esc(notlar[b]||'')}</textarea>
+  </section>`).join(''):'<div class="yok" style="grid-column:1/-1">Gösterilecek birim yok.</div>';
+}
+function filtreCiz(){
+  const hepsi=gorunenBirimler(),m=hepsi.some(b=>tur(b)==='mesai'),n=hepsi.some(b=>tur(b)==='nobet');
+  const gr=[['tum','Tümü'],...(m?[['mesai','Mesai Birimleri']]:[]),...(n?[['nobet','Nöbet Birimleri']]:[])];
+  // Tek tür varsa sekme gösterilmez; yönetici dışı tek birimde hiçbir filtre görünmez
+  $('seg').innerHTML=(yonetici()||(m&&n))?gr.map(([k,t])=>`<button class="tab${grup===k?' on':''}" data-g="${k}">${t}</button>`).join(''):'';
+  const uygun=hepsi.filter(b=>grup==='tum'||tur(b)===grup);
+  if(secili&&!uygun.includes(secili))secili='';
+  $('usel').innerHTML='<option value="">Tüm birimler</option>'+uygun.map(b=>`<option${b===secili?' selected':''}>${esc(b)}</option>`).join('');
+  $('ubx').classList.toggle('hide',!yonetici());           // birim seçimi yalnızca yöneticide
+  $('bar').classList.toggle('hide',!$('seg').innerHTML&&!yonetici());
+}
+$('seg').addEventListener('click',e=>{const g=e.target.closest('[data-g]');if(!g)return;grup=g.dataset.g;filtreCiz();ciz()});
+$('usel').onchange=e=>{secili=e.target.value;ciz()};
+$('liste').addEventListener('input',e=>{const t=e.target.closest('[data-n]');if(t)notlar[t.dataset.n]=t.value});
+$('save').onclick=()=>toast('Ön taslak: kayıt henüz bağlı değil.');
+
+(async()=>{
+  const{data:{user}}=await db.auth.getUser();
+  if(!user){location.href='index.html';return}
+  const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(!p||!p.aktif){location.href='index.html';return}
+  if(!ortakKullanici(p))return;
+  me=p;
+  $('app').classList.remove('hide');
+  if(SADECE_YONETICI&&p.rol!=='admin'){
+    $('taslak').classList.add('hide');$('bar').classList.add('hide');
+    $('liste').innerHTML='<div class="yok" style="grid-column:1/-1">Bu sayfa hazırlanıyor.</div>';return;
+  }
+  if(!SADECE_YONETICI)$('taslak').classList.add('hide');
+  filtreCiz();ciz();
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
