@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src https://adylgqlzumwnzgehqjwf.supabase.co wss://adylgqlzumwnzgehqjwf.supabase.co; img-src 'self' data:; base-uri 'none'">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1e2f4f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="112 İASB">
+<title>Bildirim · Çanakkale 112 İASB</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
+<style>
+:root{--c:#1e2f4f;--d:#14213b;--l:#e8edf5;--mesai:#0f6b73;--nobet:#6b3b7d}
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;color:#1e293b;font:14px/1.45 "Segoe UI",Tahoma,Geneva,Verdana,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0}
+.hide{display:none!important}
+#app{display:flex;flex-direction:column;min-height:100vh}
+main{max-width:1100px;width:100%;margin:0 auto;padding:16px;flex:1}
+.b{background:var(--c);color:#fff;border-radius:12px;padding:9px 16px;font-weight:600;font-size:13px}
+.b:hover{filter:brightness(1.1)}.b:disabled{opacity:.55;cursor:not-allowed}
+/* ortak.js teması .b düğmelerine lacivert zemin verir; renkli düğmeler ve beyaz yazı burada zorlanır */
+.b.gn{background:#2f6b45!important;color:#fff}.b.am{background:#a16207!important;color:#fff}
+.b.mv{background:#6d28d9!important;color:#fff}.b.gr{background:#475569!important;color:#fff}
+.b.sm{padding:6px 12px;font-size:12px}
+.hata{background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:12px}
+.uyari{background:#fff7e0;border:1px solid #f3d27a;color:#7a5a00;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:12px}
+#tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:#fff;border:1px solid #cbd5e1;color:#334155;border-radius:99px;padding:7px 15px;font-weight:600;font-size:13px;white-space:nowrap}
+.tab:hover{background:var(--l)}.tab.on{background:var(--c);color:#fff;border-color:var(--c)}
+.tab i{font-style:normal;background:#e11d48;color:#fff;border-radius:99px;padding:0 7px;font-size:11px;margin-left:6px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:15px;color:var(--c);padding-bottom:6px;border-bottom:2px solid var(--l)}
+label{display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;margin:6px 0 4px}
+textarea,select{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
+textarea{min-height:110px;resize:vertical}
+textarea:focus,select:focus{outline:3px solid rgba(42,120,214,.3)}
+.yaz{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.say{font-size:11px;color:#94a3b8}
+.fil{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px}
+.fil>div{min-width:170px;flex:1}.fil .seg{display:flex;gap:6px;flex:none;min-width:0}
+.bld{border:1px solid #cbd5e1;border-left:6px solid #94a3b8;border-radius:12px;background:#f8fafc;padding:10px 14px;margin-bottom:10px}
+.bld.yeni{border-left-color:#e11d48;background:#fff5f6}.bld.okundu{border-left-color:#a16207;background:#fffbeb}
+.bld.devam{border-left-color:#0f6b73;background:#effafb}.bld.ek_bilgi{border-left-color:#6d28d9;background:#f6f1ff}
+.bld.kapali{border-left-color:#2f6b45;background:#f0f8f3}
+.bld .r1{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.bld .r1 b{font-size:14px}
+.bld p{margin:6px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.bld .m{font-size:12px;color:#64748b}
+.bld .bt{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.son{font-size:12px;color:#475569;margin-top:6px;border-top:1px dashed #cbd5e1;padding-top:6px}
+.kon{margin-top:10px;border-top:1px solid #cbd5e1;padding-top:10px}
+.yn{border-radius:10px;padding:8px 12px;margin-bottom:8px;max-width:92%}
+.yn.y{background:#e6edf9;border:1px solid #c3d2ee;margin-left:auto}.yn.br{background:#fff;border:1px solid #d5deea}
+.yn p{margin:4px 0 0}
+.chip{font-size:11px;font-weight:700;border-radius:99px;padding:2px 10px;color:#fff;background:var(--mesai)}
+.chip.nobet{background:var(--nobet)}
+.dur{font-size:11px;font-weight:700;border-radius:99px;padding:2px 10px;background:#e2e8f0;color:#334155}
+.dur.yeni{background:#e11d48;color:#fff}.dur.okundu{background:#a16207;color:#fff}.dur.devam{background:#0f6b73;color:#fff}
+.dur.ek_bilgi{background:#6d28d9;color:#fff}.dur.kapali{background:#2f6b45;color:#fff}
+.yok{text-align:center;padding:30px 16px;color:#94a3b8}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:9px 18px;border-radius:20px;z-index:99;opacity:0;transition:.2s;pointer-events:none}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="app" class="hide">
+<div id="ortak-ust" data-sayfa="bildirim"></div>
+<script src="ortak.js?v=6"></script>
+<main>
+  <div id="hata"></div>
+  <div id="tabs"></div>
+  <div id="panel"></div>
+</main>
+<footer class="ort-alt" data-ort-alt></footer>
+</div>
+<div id="toast"></div>
+
+<script>
+const SB_URL='https://adylgqlzumwnzgehqjwf.supabase.co';
+const SB_KEY='sb_publishable_6FJPyl7rxOdLsjhqEWM4hA_6Ez9g2i4';
+// Birim grupları (ajandadaki mantıkla aynı): nöbet birimleri SAKOM, Teknik ve SKKM; diğerleri mesai
+const BIRIMLER=['Bilgi Sistemleri Birimi','Personel Birimi','Kalite Birimi','Eğitim Birimi','Disiplin Birimi','Teknik Birim','Depo Birimi','Tıbbi Cihaz Birimi','Ayniyat Birimi','Ambulans Bakım Birimi','Arşiv Birimi','SKKM Birimi','SAKOM Birimi'];
+const NOBET=['SAKOM Birimi','Teknik Birim','SKKM Birimi'];
+const tur=b=>NOBET.includes(b)?'nobet':'mesai';
+const db=supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const zaman=t=>{const x=new Date(t);return isNaN(x)?'':x.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+const kisalt=(s,n=90)=>s.length>n?s.slice(0,n)+'…':s;
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2800)};
+const DURUM={yeni:'🕓 Yeni',okundu:'👁 Okundu',devam:'↻ Devam edilsin',ek_bilgi:'➕ Ek bilgi bekleniyor',kapali:'🔒 Kapatıldı'};
+const EYLEM={kapat:'🔒 Kapattı',devam:'↻ Devam etsin',ek_bilgi:'➕ Ek bilgi istedi'};
+
+let me=null,liste=[],yanit={},sekme='',grup='tum',fBirim='',fDurum='acik',kurulumYok=false,yanitYok=false;
+let bilinen=null,bilinenY=null,imza='',acik=new Set(),tasl={},taslMetin='';
+const yon=()=>['admin','baskekim'].includes(me.rol);
+
+// Kullanıcının birimleri (yönetici dışı): kendisine tanımlı birimler
+function benimBirimler(){
+  if(me.rol==='skkm')return['SKKM Birimi'];
+  const k=(me.birimler||[]).map(b=>b==='SKKM'?'SKKM Birimi':b);
+  return BIRIMLER.filter(b=>k.includes(b));
+}
+const yeniSayi=()=>liste.filter(x=>x.durum==='yeni').length;
+
+async function yukle(zorla){
+  const[b,y]=await Promise.all([
+    db.from('bildirim').select('*').order('olusturma',{ascending:false}).limit(300),
+    db.from('bildirim_yanit').select('*').order('olusturma',{ascending:true}).limit(2000)]);
+  if(b.error){
+    kurulumYok=/PGRST205|42P01/.test((b.error.code||'')+(b.error.message||''))||/does not exist|could not find the table/i.test(b.error.message||'');
+    if(!kurulumYok)$('hata').innerHTML='<div class="hata">Bildirimler yüklenemedi: '+esc(b.error.message)+'</div>';
+    ciz();return;
+  }
+  $('hata').innerHTML='';kurulumYok=false;yanitYok=!!y.error;     // yanıt tablosu kurulmadıysa yalnızca yanıt özelliği kapalı kalır
+  const yl=y.error?[]:y.data,s=JSON.stringify([b.data,yl]);
+  if(s===imza&&!zorla)return;
+  if(bilinen){                                                    // yeni gelenleri haber ver
+    if(yon()){
+      const n=b.data.filter(x=>!bilinen.has(x.id)&&x.ekleyen!==me.id),r=yl.filter(x=>!bilinenY.has(x.id)&&!x.yonetim&&x.yazan!==me.id);
+      if(n.length)toast('🔔 '+(n.length===1?n[0].birim+': yeni bildirim':n.length+' yeni bildirim'));
+      else if(r.length)toast('💬 '+(b.data.find(x=>x.id===r[0].bildirim_id)?.birim||'Birim')+': yanıt geldi');
+    }else{
+      const r=yl.filter(x=>!bilinenY.has(x.id)&&x.yonetim);
+      if(r.length)toast('💬 Bildiriminize yanıt yazıldı');
+    }
+  }
+  bilinen=new Set(b.data.map(x=>x.id));bilinenY=new Set(yl.map(x=>x.id));
+  imza=s;liste=b.data;yanit={};yl.forEach(r=>(yanit[r.bildirim_id]??=[]).push(r));
+  const a=document.activeElement;
+  if(!zorla&&a&&a.tagName==='TEXTAREA'&&$('panel').contains(a)){imza='';return}   // yazarken ekranı yenileme, bir sonraki kontrolde yenilenir
+  ciz();
+}
+
+function sekmeler(){
+  const t=[];
+  if(yon())t.push(['gelen','📥 Gelen bildirimler',yeniSayi()],['yaz','✍️ Bildirim yaz',0]);
+  else benimBirimler().forEach(b=>t.push([b,b,liste.filter(x=>x.birim===b&&x.durum==='ek_bilgi').length]));
+  if(!t.some(x=>x[0]===sekme))sekme=t[0]?.[0]||'';
+  $('tabs').innerHTML=t.map(([k,ad,n])=>`<button class="tab${sekme===k?' on':''}" data-t="${esc(k)}">${esc(ad)}${n?`<i>${n}</i>`:''}</button>`).join('');
+  document.title=(yon()&&yeniSayi()?'('+yeniSayi()+') ':'')+'Bildirim · Çanakkale 112 İASB';
+}
+
+function konusma(x,ys){
+  const kapali=x.durum==='kapali';
+  const liste_=ys.map(r=>`<div class="yn ${r.yonetim?'y':'br'}"><div class="m">${r.yonetim?'🛡️':'👤'} <b>${esc(r.yazan_ad||'—')}</b> · ${zaman(r.olusturma)}${EYLEM[r.eylem]?` · <b>${EYLEM[r.eylem]}</b>`:''}</div><p>${esc(r.metin)}</p></div>`).join('');
+  let kutu;
+  if(yon())kutu=`<textarea data-r="${x.id}" style="min-height:70px" placeholder="Yanıtınızı yazın (Tamam için yazmanız şart değil)">${esc(tasl[x.id]||'')}</textarea>
+    <div class="bt"><button class="b gn sm" data-e="kapat">🔒 Tamam, kapat</button><button class="b am sm" data-e="devam">↻ Devam etsin</button><button class="b mv sm" data-e="ek_bilgi">➕ Ek bilgi iste</button><button class="b sm" data-e="yanit">💬 Yanıt yaz</button></div>`;
+  else if(kapali)kutu='<div class="m">🔒 Bu bildirim kapatıldı.</div>';
+  else kutu=`<textarea data-r="${x.id}" style="min-height:70px" placeholder="Ek bilgi ya da yanıt yazın">${esc(tasl[x.id]||'')}</textarea><div class="bt"><button class="b sm" data-e="yanit">📨 Gönder</button></div>`;
+  return `<div class="kon">${liste_||'<div class="m" style="margin-bottom:8px">Henüz yanıt yok.</div>'}${kutu}</div>`;
+}
+
+const bildirimHtml=x=>{
+  const ys=yanit[x.id]||[],son=ys[ys.length-1],ac=acik.has(x.id);
+  return `<article class="bld ${x.durum}" data-bid="${x.id}">
+  <div class="r1"><span><b>${esc(x.birim)}</b> <span class="chip ${tur(x.birim)}">${tur(x.birim)==='nobet'?'Nöbet':'Mesai'}</span></span><span class="dur ${x.durum}">${DURUM[x.durum]||esc(x.durum)}</span></div>
+  <p>${esc(x.metin)}</p>
+  <div class="m">👤 ${esc(x.ekleyen_ad||'—')} · ${zaman(x.olusturma)}${x.durum!=='yeni'&&x.isleyen_ad?` &nbsp;|&nbsp; ${x.durum==='kapali'?'🔒 Kapatan':'👁 İşleyen'}: ${esc(x.isleyen_ad)} · ${zaman(x.islem_zamani)}`:''}</div>
+  <div class="bt">${yon()&&x.durum==='yeni'?`<button class="b am sm" data-a="okundu">👁 Okundu</button>`:''}${yanitYok?'':`<button class="b gr sm" data-th="1">💬 Yanıtlar${ys.length?' ('+ys.length+')':''} ${ac?'▲':'▼'}</button>`}</div>
+  ${son&&!ac?`<div class="son">↩ <b>${esc(son.yazan_ad||'—')}</b>: ${esc(kisalt(son.metin))}</div>`:''}
+  ${ac&&!yanitYok?konusma(x,ys):''}</article>`;
+};
+
+const yazKutusu=(birimSecici,birim)=>`<div class="card"><h3>${birimSecici?'Yeni bildirim':esc(birim)+' · Yeni bildirim'}</h3>
+  ${birimSecici?`<label>Birim</label><select id="ybirim">${BIRIMLER.map(b=>`<option>${esc(b)}</option>`).join('')}</select>`:''}
+  <label>Bildirim / Not</label>
+  <textarea id="metin" maxlength="2000" placeholder="Örn: 28.11.2026 tarihinde 1 iş kazası oldu.">${esc(taslMetin)}</textarea>
+  <div class="yaz"><span class="say" id="say">${taslMetin.length} / 2000</span><button class="b" id="gonder" data-birim="${esc(birim||'')}">📨 Kaydet ve gönder</button></div>
+  <div class="say" style="margin-top:8px">Bildirim Başhekime ve yöneticiye iletilir. Gönderdikten sonra değiştirilemez; Başhekim yanıt yazabilir, siz de yanıta ek bilgi yazabilirsiniz.</div></div>`;
+
+function ciz(){
+  sekmeler();
+  if(kurulumYok){$('panel').innerHTML='<div class="hata"><b>Kurulum gerekiyor.</b> Veritabanında <code>bildirim</code> tablosu yok. <code>bildirim_kurulum.sql</code> dosyasını Supabase &gt; SQL Editor\'da bir kez çalıştırın, sonra sayfayı yenileyin.</div>';return}
+  const uy=yanitYok?'<div class="uyari">Yanıt özelliği için <code>bildirim_guncelle.sql</code> dosyası Supabase &gt; SQL Editor\'da bir kez çalıştırılmalı.</div>':'';
+  if(!sekme){$('panel').innerHTML='<div class="yok">Hesabınıza tanımlı birim bulunamadı. Yöneticinizle iletişime geçin.</div>';return}
+  if(yon()&&sekme==='yaz'){$('panel').innerHTML=uy+yazKutusu(true,'');return}
+  if(yon()){                                              // Gelen bildirimler paneli
+    let l=liste;
+    if(grup!=='tum')l=l.filter(x=>tur(x.birim)===grup);
+    if(fBirim)l=l.filter(x=>x.birim===fBirim);
+    if(fDurum==='acik')l=l.filter(x=>x.durum!=='kapali');else if(fDurum==='yeni')l=l.filter(x=>x.durum==='yeni');
+    const bl=BIRIMLER.filter(b=>grup==='tum'||tur(b)===grup),yn=l.filter(x=>x.durum==='yeni').length;
+    $('panel').innerHTML=uy+`<div class="card"><h3>Gelen bildirimler</h3>
+      <div class="fil"><div class="seg">${[['tum','Tümü'],['mesai','Mesai'],['nobet','Nöbet']].map(([k,t])=>`<button class="tab${grup===k?' on':''}" data-g="${k}">${t}</button>`).join('')}</div>
+      <div><label>Birim</label><select id="fb"><option value="">Tüm birimler</option>${bl.map(b=>`<option${b===fBirim?' selected':''}>${esc(b)}</option>`).join('')}</select></div>
+      <div><label>Durum</label><select id="fd">${[['acik','Açık olanlar'],['yeni','Yeni / yanıt bekleyenler'],['hepsi','Tümü (kapatılanlar dahil)']].map(([k,t])=>`<option value="${k}"${fDurum===k?' selected':''}>${t}</option>`).join('')}</select></div>
+      ${yn?`<button class="b gr sm" id="hepsiOkundu">👁 Görünenleri okundu yap (${yn})</button>`:''}</div>
+      ${l.length?l.map(bildirimHtml).join(''):'<div class="yok">Gösterilecek bildirim yok.</div>'}</div>`;
+    return;
+  }
+  const l=liste.filter(x=>x.birim===sekme);                 // birim kullanıcısı: kendi birimi
+  $('panel').innerHTML=uy+yazKutusu(false,sekme)+`<div class="card"><h3>Gönderilen bildirimler</h3>${l.length?l.slice(0,40).map(bildirimHtml).join(''):'<div class="yok">Henüz bildirim gönderilmedi.</div>'}</div>`;
+}
+
+async function gonder(){
+  const b=yon()?$('ybirim').value:$('gonder').dataset.birim,m=($('metin').value||'').trim();
+  if(!m){toast('Bildirim metni boş olamaz.');return}
+  $('gonder').disabled=true;
+  const{error}=await db.from('bildirim').insert({birim:b,metin:m});
+  if(error){$('gonder').disabled=false;toast('Gönderilemedi: '+error.message);return}
+  taslMetin='';toast('✔ Bildirim gönderildi.');await yukle(true);
+}
+async function yanitla(id,eylem){
+  const k=$('panel').querySelector(`[data-r="${id}"]`);let m=(k?.value||'').trim();
+  if(!m&&eylem==='kapat')m='Tamam, kapatıldı.';
+  if(!m){toast('Lütfen bir yanıt yazın.');return}
+  const{error}=await db.from('bildirim_yanit').insert({bildirim_id:id,metin:m,eylem});
+  if(error){toast('Gönderilemedi: '+error.message);return}
+  delete tasl[id];toast(eylem==='kapat'?'🔒 Bildirim kapatıldı.':'✔ Yanıt gönderildi.');await yukle(true);
+}
+async function durumDegis(ids,durum){
+  const{error}=await db.from('bildirim').update({durum}).in('id',ids);
+  if(error){toast('İşlem yapılamadı: '+error.message);return}
+  await yukle(true);
+}
+
+$('tabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(t){sekme=t.dataset.t;ciz()}});
+$('panel').addEventListener('click',e=>{
+  const g=e.target.closest('[data-g]');if(g){grup=g.dataset.g;fBirim='';ciz();return}
+  const art=e.target.closest('[data-bid]'),id=art?Number(art.dataset.bid):0;
+  if(e.target.closest('[data-th]')){acik.has(id)?acik.delete(id):acik.add(id);ciz();return}
+  const a=e.target.closest('[data-a]');if(a){durumDegis([id],a.dataset.a);return}
+  const y=e.target.closest('[data-e]');if(y){yanitla(id,y.dataset.e);return}
+  if(e.target.closest('#gonder'))gonder();
+  if(e.target.closest('#hepsiOkundu')){
+    let l=liste.filter(x=>x.durum==='yeni');if(grup!=='tum')l=l.filter(x=>tur(x.birim)===grup);if(fBirim)l=l.filter(x=>x.birim===fBirim);
+    durumDegis(l.map(x=>x.id),'okundu');
+  }
+});
+$('panel').addEventListener('change',e=>{if(e.target.id==='fb'){fBirim=e.target.value;ciz()}if(e.target.id==='fd'){fDurum=e.target.value;ciz()}});
+$('panel').addEventListener('input',e=>{
+  if(e.target.id==='metin'){taslMetin=e.target.value;$('say').textContent=taslMetin.length+' / 2000'}
+  const r=e.target.closest('[data-r]');if(r)tasl[Number(r.closest('[data-bid]').dataset.bid)]=r.value;
+});
+
+(async()=>{
+  const{data:{user}}=await db.auth.getUser();
+  if(!user){location.href='index.html';return}
+  const{data:p}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(!p||!p.aktif){location.href='index.html';return}
+  if(!ortakKullanici(p))return;
+  me=p;$('app').classList.remove('hide');
+  await yukle(true);
+  // Anlık güncelleme: yeni bildirim/yanıt gelince ekran kendini yeniler (RLS'ye uyar); yedek olarak 45 sn'de bir kontrol
+  try{db.channel('bildirim-panel')
+    .on('postgres_changes',{event:'*',schema:'public',table:'bildirim'},()=>yukle())
+    .on('postgres_changes',{event:'*',schema:'public',table:'bildirim_yanit'},()=>yukle()).subscribe()}catch(e){}
+  setInterval(()=>{if(!document.hidden&&!kurulumYok)yukle()},45000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!kurulumYok)yukle()});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
