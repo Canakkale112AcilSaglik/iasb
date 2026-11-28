@@ -339,7 +339,7 @@ async function enter(){
   clearInterval(yenH);yenH=setInterval(bugunYukle,120000);
   bugunYukle();rapor();istAnaliz();aracAnaliz();
   // Diğer sayfalardaki Yönetim / Şifre düğmeleri buraya yönlendirir; pencere kapanınca o sayfaya dönülür.
-  const q=new URLSearchParams(location.search),don=['ajanda.html','bulten.html','genel-bilgiler.html'].find(x=>x===q.get('don'));
+  const q=new URLSearchParams(location.search),don=['ajanda.html','bulten.html','bildirim.html','genel-bilgiler.html'].find(x=>x===q.get('don'));
   if(location.search)history.replaceState(null,'',location.pathname);
   const ac=d=>{if(don)$(d).addEventListener('close',()=>{location.href=don},{once:true})};
   if(!p.sifre_degisti&&!ortakMi(p))openPw(true);
