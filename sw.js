@@ -1,6 +1,6 @@
 // Çanakkale 112 İASB portalı: önce ağ, çevrimdışıysa son önbellek. Sadece kendi dosyalarımız saklanır, veri saklanmaz.
-const V = 'iasb-v10';
-const DOSYALAR = ['./', 'index.html', 'ajanda.html', 'bulten.html', 'genel-bilgiler.html', 'bildirim.html', 'bulten-app.js?v=10', 'bulten-config.js', 'ortak.js?v=6', 'manifest.json', 'icon-192.png', 'icon-512.png'];
+const V = 'iasb-v11';
+const DOSYALAR = ['./', 'index.html', 'ajanda.html', 'bulten.html', 'genel-bilgiler.html', 'bildirim.html', 'bulten-app.js?v=10', 'bulten-config.js', 'ortak.js?v=7', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(DOSYALAR)).then(() => self.skipWaiting()));
 });
